@@ -2,6 +2,6 @@
 {
     public interface IECSBootstrap
     {
-        void OnBootstrap();
+        void OnBootstrap(IContextBinding context);
     };
 }

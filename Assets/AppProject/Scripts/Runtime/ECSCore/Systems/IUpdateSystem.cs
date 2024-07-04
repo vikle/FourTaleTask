@@ -2,7 +2,7 @@
 {
     public interface IUpdateSystem : ISystem
     {
-        void OnUpdate();
+        void OnUpdate(IContext context);
     };
 }
 

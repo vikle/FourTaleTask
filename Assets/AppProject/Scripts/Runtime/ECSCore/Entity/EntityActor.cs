@@ -12,12 +12,12 @@ namespace ECSCore
 
         void OnEnable()
         {
-            ECSEngine.AddEntity(this);
+            ECSEngine.Context.AddEntity(this);
         }
 
         void OnDisable()
         {
-            ECSEngine.RemoveEntity(this);
+            ECSEngine.Context.RemoveEntity(this);
         }
 
         public bool Has<T>() where T : class, IFragment
@@ -37,16 +37,25 @@ namespace ECSCore
             return false;
         }
 
-        public void Trigger<T>() where T : class, IEvent
+        public T Trigger<T>() where T : class, IEvent
         {
-            Add<T>();
+            return Add<T>();
         }
 
-        public void Add<T>() where T : class, IFragment
+        public T Add<T>() where T : class, IFragment
         {
             var type = typeof(T);
-            if (m_components.ContainsKey(type)) return;
-            m_components[type] = FragmentFactory.GetInstance<T>();
+            
+            if (m_components.TryGetValue(type, out var raw) && raw is T instance)
+            {
+                return instance;
+            }
+            
+            instance = FragmentFactory.GetInstance<T>();
+            
+            m_components[type] = instance;
+
+            return instance;
         }
 
         public void Remove<T>() where T : class, IFragment
@@ -58,6 +67,16 @@ namespace ECSCore
 
             FragmentFactory.Release(instance);
             m_components.Remove(type);
+        }
+        
+        public void Add<T>(T instance) where T : EntityActorComponent
+        {
+            m_components[typeof(T)] = instance;
+        }
+        
+        public void Remove<T>(T instance) where T : EntityActorComponent
+        {
+            m_components.Remove(instance.GetType());
         }
     };
 }

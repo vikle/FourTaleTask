@@ -24,15 +24,13 @@ namespace ECSCore.Tools
                 instance = Activator.CreateInstance<T>();
                 sr_pool[pool_type] = new(8);
             }
-
-            instance.OnCreated();
             
             return instance;
         }
         
-        public static void Release(IFragment instance)
+        public static void Release<T>(T instance) where T : class, IFragment
         {
-            var pool_type = instance.GetType();
+            var pool_type = typeof(T);
 
             if (sr_pool.TryGetValue(pool_type, out var stack) == false)
             {

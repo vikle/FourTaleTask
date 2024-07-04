@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace ECSCore
+﻿namespace ECSCore
 {
     public sealed class EventCollector<T> : IUpdateSystem where T : class, IEvent
     {
-        public void OnUpdate()
+        public void OnUpdate(IContext context)
         {
-            foreach (var entity in ECSEngine.GetEntitiesEnumerator())
+            foreach (var entity in context)
             {
                 if (entity.Has<T>())
                 {
