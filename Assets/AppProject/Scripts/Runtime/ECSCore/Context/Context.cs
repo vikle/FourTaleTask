@@ -1,6 +1,7 @@
-﻿using System.Collections;
-using System.Reflection;
+﻿using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace ECSCore
 {
@@ -9,23 +10,32 @@ namespace ECSCore
         readonly List<IEntity> m_entities = new(4);
         readonly List<ISystem> m_allSystems = new(8);
         readonly List<IUpdateSystem> m_updateSystems = new(8);
+        readonly List<IEntityEnabledSystem> m_entityEnabledSystems = new(8);
+        readonly List<IEntityDisabledSystem> m_entityDisabledSystems = new(8);
         ArrayList m_injectionsCache = new(8);
         
         public void AddEntity(IEntity entity)
         {
-            if (m_entities.Contains(entity) == false)
+            if (m_entities.Contains(entity)) return;
+            
+            m_entities.Add(entity);
+            
+            for (int i = 0, i_max = m_entityEnabledSystems.Count; i < i_max; i++)
             {
-                m_entities.Add(entity);
+                m_entityEnabledSystems[i].OnIEntityEnabled(entity, this);
             }
         }
     
         public void RemoveEntity(IEntity entity)
         {
             int entity_id = m_entities.IndexOf(entity);
-        
-            if (entity_id > -1)
+            if (entity_id < 0) return;
+            
+            m_entities.RemoveAt(entity_id);
+            
+            for (int i = 0, i_max = m_entityDisabledSystems.Count; i < i_max; i++)
             {
-                m_entities.RemoveAt(entity_id);
+                m_entityDisabledSystems[i].OnIEntityDisabled(entity, this);
             }
         }
 
@@ -45,16 +55,22 @@ namespace ECSCore
                 case IUpdateSystem update_system: 
                     m_updateSystems.Add(update_system);
                     break;
+                case IEntityEnabledSystem enabled_system: 
+                    m_entityEnabledSystems.Add(enabled_system);
+                    break;
+                case IEntityDisabledSystem disabled_system: 
+                    m_entityDisabledSystems.Add(disabled_system);
+                    break;
             }
 
             return this;
         }
 
-        public IContextBinding Inject(object data)
+        public IContextBinding Inject<T>(T injection) where T : class
         {
-            if (m_injectionsCache.Contains(data) == false)
+            if (m_injectionsCache.Contains(injection) == false)
             {
-                m_injectionsCache.Add(data);
+                m_injectionsCache.Add(injection);
             }
             
             return this;
@@ -93,6 +109,7 @@ namespace ECSCore
             m_injectionsCache = null;
         }
         
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void OnStart()
         {
             for (int i = 0, i_max = m_allSystems.Count; i < i_max; i++)
@@ -104,6 +121,7 @@ namespace ECSCore
             }
         }
     
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void OnUpdate()
         {
             for (int i = 0, i_max = m_updateSystems.Count; i < i_max; i++)
@@ -112,6 +130,7 @@ namespace ECSCore
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ContextEnumerator GetEnumerator()
         {
             return new(m_entities);

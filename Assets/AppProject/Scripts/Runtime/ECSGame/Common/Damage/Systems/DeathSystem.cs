@@ -8,10 +8,14 @@ namespace ECSGame
         {
             foreach (var entity in context)
             {
-                if (entity.Has<DeathEvent>())
+                if (!entity.Has<DeathEvent>()) continue;
+                
+                if (entity.TryGet(out HealthComponent health))
                 {
-                    OnDie(entity);
+                    health.currentHealth = 0f;
                 }
+                    
+                OnDie(entity);
             }
         }
 

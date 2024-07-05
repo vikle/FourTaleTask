@@ -4,6 +4,6 @@
     {
         IContextBinding BindEvent<T>() where T : class, IEvent;
         IContextBinding BindSystem<T>() where T : class, ISystem, new();
-        IContextBinding Inject(object obj);
+        IContextBinding Inject<T>(T injection) where T : class;
     };
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace ECSCore
 {
@@ -8,6 +9,7 @@ namespace ECSCore
         readonly int m_count;
         int m_index;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ContextEnumerator(IReadOnlyList<IEntity> entities)
         {
             m_entities = entities;
@@ -15,9 +17,14 @@ namespace ECSCore
             m_index = -1;
             Current = default;
         }
-     
-        public IEntity Current { get; private set; }
 
+        public IEntity Current
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]get; 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]private set;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool MoveNext()
         {
             int count = m_count;

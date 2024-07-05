@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace ECSCore
@@ -7,11 +6,11 @@ namespace ECSCore
     [DefaultExecutionOrder(-1)]
     public sealed class ECSEngine : MonoBehaviour
     {
+        public MonoBehaviour bootstrap;
+        
         public static IContext Context { get; private set; }
         static IContextRuntime s_runtime;
-        
-        public MonoBehaviour bootstrap;
-    
+
         void Awake()
         {
             var context = new Context();
@@ -23,7 +22,7 @@ namespace ECSCore
                 ecs_bootstrap.OnBootstrap(context);
             }
             
-            s_runtime.Init();
+            context.Init();
         }
 
         void Start()
