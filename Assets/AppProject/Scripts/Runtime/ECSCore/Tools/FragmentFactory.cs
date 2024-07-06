@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ECSCore.Tools
+namespace ECSCore
 {
     public static class FragmentFactory
     {
@@ -30,7 +30,7 @@ namespace ECSCore.Tools
         
         public static void Release<T>(T instance) where T : class, IFragment
         {
-            var pool_type = typeof(T);
+            var pool_type = instance.GetType();
 
             if (sr_pool.TryGetValue(pool_type, out var stack) == false)
             {

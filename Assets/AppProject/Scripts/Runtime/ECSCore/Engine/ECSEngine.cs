@@ -32,6 +32,7 @@ namespace ECSCore
 
         void Update()
         {
+            TimeData.OnUpdate();
             s_runtime.OnUpdate();
         }
     };

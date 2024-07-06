@@ -43,6 +43,11 @@ namespace ECSCore
         {
             return BindSystem<EventCollector<T>>();
         }
+        
+        public IContextBinding BindPromise<T>() where T : class, IPromise
+        {
+            return BindSystem<PromiseCollector<T>>();
+        }
     
         public IContextBinding BindSystem<T>() where T : class, ISystem, new()
         {

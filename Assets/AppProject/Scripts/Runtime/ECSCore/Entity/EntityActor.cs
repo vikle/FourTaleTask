@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using ECSCore.Tools;
 
 namespace ECSCore
 {
@@ -66,6 +65,11 @@ namespace ECSCore
         {
             return Add<T>();
         }
+        
+        public T Then<T>() where T : class, IPromise
+        {
+            return Add<T>();
+        }
 
         public T Add<T>() where T : class, IFragment
         {
@@ -80,6 +84,12 @@ namespace ECSCore
             m_fragmentsMap[type] = instance;
             
             return instance;
+        }
+
+        public void Add<T>(T instance) where T : class, IFragment
+        {
+            if (instance == null) return;
+            m_fragmentsMap[instance.GetType()] = instance;
         }
 
         public void Remove<T>() where T : class, IFragment

@@ -2,7 +2,7 @@
 
 namespace ECSGame
 {
-    public class HealthComponentInitializeSystem : IEntityInitializeSystem
+    public sealed class HealthComponentInitializeSystem : IEntityInitializeSystem
     {
         public void OnAfterEntityCreated(IContext context, IEntity entity)
         {

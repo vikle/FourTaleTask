@@ -1196,6 +1196,8 @@ GameObject:
   - component: {fileID: 2587244186044482697}
   - component: {fileID: 3441922035692767279}
   - component: {fileID: 4362761419416677409}
+  - component: {fileID: 4652178554759203973}
+  - component: {fileID: 3212445213514514135}
   m_Layer: 0
   m_Name: Zombie_Normal (default)
   m_TagString: Untagged
@@ -1230,7 +1232,7 @@ Animator:
   m_GameObject: {fileID: 8028504333613449318}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8b195c47592e6aa499d2ff9a9c371f55, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0b807331ec6038b4fb44f348b785afbf, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1310,6 +1312,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actor: {fileID: 184542191514228844}
   bar: {fileID: 2742259503559416925}
+--- !u!114 &4652178554759203973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028504333613449318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c75ffd2368864fcb854b699fb4111a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: {fileID: 184542191514228844}
+  animator: {fileID: 3715820047659455768}
+  idle: Idle
+  attack: Attack
+  defence: Defence
+  death: Death
+--- !u!114 &3212445213514514135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028504333613449318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e9a87c0020f473e83a7b9d02f1130b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: {fileID: 184542191514228844}
 --- !u!1 &8539148842809538833
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,5 @@
-﻿using ECSCore;
-using UnityEngine;
+﻿using UnityEngine;
+using ECSCore;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -15,8 +15,7 @@ namespace ECSGame
     };
 
 #if UNITY_EDITOR
-    [CustomEditor(typeof(HealthComponent))]
-    [CanEditMultipleObjects]
+    [CustomEditor(typeof(HealthComponent)), CanEditMultipleObjects]
     public sealed class HealthComponentEditor : Editor
     {
         public new HealthComponent target;
@@ -30,9 +29,8 @@ namespace ECSGame
         {
             base.OnInspectorGUI();
 
-            GUI.enabled = Application.isPlaying;
-            
             GUILayout.Space(10f);
+            GUI.enabled = Application.isPlaying;
 
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Damage_40%"))

@@ -13,6 +13,14 @@ namespace ECSGame
         {
             context
                 .BindSystem<HealthComponentInitializeSystem>()
+                ;
+            
+            context
+                .BindSystem<AnimationDataInitializeSystem>()
+                ;
+            
+            context
+                .BindSystem<CharacterSystem>()
                 .BindSystem<HealingSystem>()
                 .BindSystem<DamageSystem>()
                 .BindSystem<DefenceBuffAddSystem>()
@@ -21,6 +29,11 @@ namespace ECSGame
                 .BindSystem<EnemyDeathSystem>()
                 ;
 
+            context
+                .BindSystem<CharacterAnimationSystem>()
+                .BindSystem<AnimationSystem>()
+                ;
+                
             context
                 .BindSystem<UI.HealthBarInitializeSystem>()
                 .BindSystem<UI.HealthBarSystem>()
@@ -35,6 +48,19 @@ namespace ECSGame
                 .BindEvent<HealEvent>()
                 .BindEvent<DamageEvent>()
                 .BindEvent<DeathEvent>()
+                .BindEvent<CharacterHealEvent>()
+                .BindEvent<CharacterAttackEvent>()
+                .BindEvent<CharacterDefenceEvent>()
+                ;
+            
+            context
+                .BindEvent<PlayAnimationEvent>()
+                ;
+            
+            context
+                .BindPromise<CharacterHealPromise>()
+                .BindPromise<CharacterAttackPromise>()
+                .BindPromise<CharacterDefencePromise>()
                 ;
             
             

@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 713551864128397269}
   - component: {fileID: 546940109629432622}
   - component: {fileID: 8567109761262266859}
+  - component: {fileID: 7939439508476255989}
+  - component: {fileID: 1366648256200405156}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Untagged
@@ -106,6 +108,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actor: {fileID: 3844729819337633055}
   bar: {fileID: 2565860136147534249}
+--- !u!114 &7939439508476255989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3957064112005008361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c75ffd2368864fcb854b699fb4111a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: {fileID: 3844729819337633055}
+  animator: {fileID: 3957064112905464536}
+  idle: Idle
+  attack: Attack
+  defence: Defence
+  death: Death
+--- !u!114 &1366648256200405156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3957064112005008361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e9a87c0020f473e83a7b9d02f1130b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: {fileID: 3844729819337633055}
 --- !u!1 &3957064112905464539
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,7 +236,7 @@ Animator:
   m_GameObject: {fileID: 3957064112905464539}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 62124788b68b07246aefe73575d505ee, type: 2}
+  m_Controller: {fileID: 9100000, guid: 60b539e08fe4cd14ea661479963e042e, type: 2}
   m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
