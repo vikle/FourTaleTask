@@ -2,9 +2,9 @@
 
 namespace ECSGame
 {
-    public class HealthComponentEnabledSystem : IEntityEnabledSystem
+    public class HealthComponentInitializeSystem : IEntityInitializeSystem
     {
-        public void OnIEntityEnabled(IEntity entity, IContext context)
+        public void OnAfterEntityCreated(IContext context, IEntity entity)
         {
             if (!entity.TryGet(out HealthComponent health)) return;
 

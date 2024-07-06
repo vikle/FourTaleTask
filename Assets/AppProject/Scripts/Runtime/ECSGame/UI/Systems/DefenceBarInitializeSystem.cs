@@ -2,9 +2,9 @@
 
 namespace ECSGame.UI
 {
-    public sealed class DefenceBarEnabledSystem : IEntityEnabledSystem
+    public sealed class DefenceBarInitializeSystem : IEntityInitializeSystem
     {
-        public void OnIEntityEnabled(IEntity entity, IContext context)
+        public void OnAfterEntityCreated(IContext context, IEntity entity)
         {
             if (!entity.TryGet(out DefenceBarComponent defence_bar)) return;
             

@@ -2,9 +2,9 @@
 
 namespace ECSGame.UI
 {
-    public sealed class HealthBarEnabledSystem : IEntityEnabledSystem
+    public sealed class HealthBarInitializeSystem : IEntityInitializeSystem
     {
-        public void OnIEntityEnabled(IEntity entity, IContext context)
+        public void OnAfterEntityCreated(IContext context, IEntity entity)
         {
             if (!entity.TryGet(out HealthBarComponent health_bar)) return;
             if (!entity.TryGet(out HealthComponent health)) return;

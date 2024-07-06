@@ -10,32 +10,32 @@ namespace ECSCore
         readonly List<IEntity> m_entities = new(4);
         readonly List<ISystem> m_allSystems = new(8);
         readonly List<IUpdateSystem> m_updateSystems = new(8);
-        readonly List<IEntityEnabledSystem> m_entityEnabledSystems = new(8);
-        readonly List<IEntityDisabledSystem> m_entityDisabledSystems = new(8);
+        readonly List<IEntityInitializeSystem> m_entityInitializeSystems = new(8);
+        readonly List<IEntityTerminateSystem> m_entityTerminateSystems = new(8);
         ArrayList m_injectionsCache = new(8);
         
         public void AddEntity(IEntity entity)
         {
             if (m_entities.Contains(entity)) return;
+
+            for (int i = 0, i_max = m_entityInitializeSystems.Count; i < i_max; i++)
+            {
+                m_entityInitializeSystems[i].OnAfterEntityCreated(this, entity);
+            }
             
             m_entities.Add(entity);
-            
-            for (int i = 0, i_max = m_entityEnabledSystems.Count; i < i_max; i++)
-            {
-                m_entityEnabledSystems[i].OnIEntityEnabled(entity, this);
-            }
         }
     
         public void RemoveEntity(IEntity entity)
         {
             int entity_id = m_entities.IndexOf(entity);
             if (entity_id < 0) return;
-            
+
             m_entities.RemoveAt(entity_id);
             
-            for (int i = 0, i_max = m_entityDisabledSystems.Count; i < i_max; i++)
+            for (int i = 0, i_max = m_entityTerminateSystems.Count; i < i_max; i++)
             {
-                m_entityDisabledSystems[i].OnIEntityDisabled(entity, this);
+                m_entityTerminateSystems[i].OnBeforeEntityDestroyed(this, entity);
             }
         }
 
@@ -55,11 +55,11 @@ namespace ECSCore
                 case IUpdateSystem update_system: 
                     m_updateSystems.Add(update_system);
                     break;
-                case IEntityEnabledSystem enabled_system: 
-                    m_entityEnabledSystems.Add(enabled_system);
+                case IEntityInitializeSystem enabled_system: 
+                    m_entityInitializeSystems.Add(enabled_system);
                     break;
-                case IEntityDisabledSystem disabled_system: 
-                    m_entityDisabledSystems.Add(disabled_system);
+                case IEntityTerminateSystem disabled_system: 
+                    m_entityTerminateSystems.Add(disabled_system);
                     break;
             }
 
@@ -83,6 +83,8 @@ namespace ECSCore
 
         private void InjectDependencies()
         {
+            if (m_injectionsCache.Count == 0) return;
+            
             const BindingFlags k_binding_flags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             
             for (int i = 0, i_max = m_allSystems.Count; i < i_max; i++)

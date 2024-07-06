@@ -12,7 +12,7 @@ namespace ECSGame
         public void OnBootstrap(IContextBinding context)
         {
             context
-                .BindSystem<HealthComponentEnabledSystem>()
+                .BindSystem<HealthComponentInitializeSystem>()
                 .BindSystem<HealingSystem>()
                 .BindSystem<DamageSystem>()
                 .BindSystem<DefenceBuffAddSystem>()
@@ -22,9 +22,9 @@ namespace ECSGame
                 ;
 
             context
-                .BindSystem<UI.HealthBarEnabledSystem>()
+                .BindSystem<UI.HealthBarInitializeSystem>()
                 .BindSystem<UI.HealthBarSystem>()
-                .BindSystem<UI.DefenceBarEnabledSystem>()
+                .BindSystem<UI.DefenceBarInitializeSystem>()
                 .BindSystem<UI.DefenceBarSystem>()
                 ;
             
