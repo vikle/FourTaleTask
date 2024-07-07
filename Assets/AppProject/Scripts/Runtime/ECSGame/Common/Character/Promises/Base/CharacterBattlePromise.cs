@@ -5,7 +5,7 @@ namespace ECSGame
 {
     public abstract class CharacterBattlePromise : IPromise
     {
-        public bool IsFulfilled { get; set; }
+        public EPromiseState State { get; set; }
         public List<IEvent> Resolve { get; } = new();
         
         public float eventTriggerTime;

@@ -15,10 +15,10 @@ namespace ECSGame
                     health.currentHealth = 0f;
                 }
                     
-                OnDie(entity);
+                OnDie(context, entity);
             }
         }
 
-        protected abstract void OnDie(IEntity entity);
+        protected abstract void OnDie(IContext context, IEntity entity);
     };
 }

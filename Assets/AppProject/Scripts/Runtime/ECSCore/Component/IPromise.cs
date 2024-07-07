@@ -2,9 +2,16 @@
 
 namespace ECSCore
 {
+    public enum EPromiseState : byte
+    {
+        Pending, 
+        Fulfilled, 
+        Rejected
+    };
+    
     public interface IPromise : IFragment
     {
-        bool IsFulfilled { get; set; }
+        EPromiseState State { get; set; }
         List<IEvent> Resolve { get; }
     };
 }

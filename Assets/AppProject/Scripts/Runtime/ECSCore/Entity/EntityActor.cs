@@ -49,18 +49,6 @@ namespace ECSCore
             return m_fragmentsMap.ContainsKey(typeof(T));
         }
 
-        public bool TryGet<T>(out T fragment) where T : class, IFragment
-        {
-            if (m_fragmentsMap.TryGetValue(typeof(T), out var raw) && raw is T instance)
-            {
-                fragment = instance;
-                return true;
-            }
-
-            fragment = default;
-            return false;
-        }
-
         public T Trigger<T>() where T : class, IEvent
         {
             return Add<T>();
@@ -71,6 +59,14 @@ namespace ECSCore
             return Add<T>();
         }
 
+        public void Reject<T>() where T : class, IPromise
+        {
+            if (TryGet(out T promise))
+            {
+                promise.State = EPromiseState.Rejected;
+            }
+        }
+        
         public T Add<T>() where T : class, IFragment
         {
             var type = typeof(T);
@@ -92,6 +88,20 @@ namespace ECSCore
             m_fragmentsMap[instance.GetType()] = instance;
         }
 
+        public bool TryGet<T>(out T fragment) where T : class, IFragment
+        {
+            var type = typeof(T);
+            
+            if (m_fragmentsMap.TryGetValue(type, out var raw) && raw is T instance)
+            {
+                fragment = instance;
+                return true;
+            }
+
+            fragment = default;
+            return false;
+        }
+        
         public void Remove<T>() where T : class, IFragment
         {
             var type = typeof(T);

@@ -5,21 +5,21 @@ namespace ECSGame
 {
     public sealed class CharacterSystem : IUpdateSystem
     {
-        readonly CardGameTable m_cardGameTable;
+        // readonly CardGameTable m_cardGameTable;
         
         public void OnUpdate(IContext context)
         {
             foreach (var entity in context)
             {
                 if (!entity.TryGet(out CharacterComponent character)) continue;
-
+                
                 if (entity.TryGet(out CharacterAttackEvent attack_event))
                 {
                     var resolve_event = FragmentFactory.GetInstance<AttackEvent>();
                     resolve_event.damage = attack_event.value;
                     var attack_targets = resolve_event.targets;
                     attack_targets.Clear();
-                    attack_targets.AddRange(m_cardGameTable.CurrentOpponents);
+                    attack_targets.AddRange(attack_event.targets);
                     ThenPromise<CharacterAttackPromise>(entity, character.damageEventDelay, resolve_event);
                 }
                 
@@ -52,10 +52,9 @@ namespace ECSGame
 
         private static void PromiseProcess<T>(IEntity entity) where T : CharacterBattlePromise
         {
-            if (entity.TryGet(out T promise))
-            {
-                promise.IsFulfilled = (promise.eventTriggerTime <= TimeData.Time);
-            }
+            if (!entity.TryGet(out T promise)) return;
+            if (TimeData.Time < promise.eventTriggerTime) return;
+            promise.State = EPromiseState.Fulfilled;
         }
     };
 }

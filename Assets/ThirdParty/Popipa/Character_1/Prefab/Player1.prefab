@@ -122,10 +122,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actor: {fileID: 3844729819337633055}
   animator: {fileID: 3957064112905464536}
-  idle: Idle
-  attack: Attack
-  defence: Defence
-  death: Death
+  idleName: Idle
+  attackName: Attack
+  defenceName: Defence
+  healName: Heal
+  deathName: Death
 --- !u!114 &1366648256200405156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,6 +140,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actor: {fileID: 3844729819337633055}
+  damageEventDelay: 0.5
+  defenceEventDelay: 1.07
+  healEventDelay: 0.5
 --- !u!1 &3957064112905464539
 GameObject:
   m_ObjectHideFlags: 0

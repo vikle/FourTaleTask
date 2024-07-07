@@ -10,7 +10,7 @@ namespace ECSGame
             {
                 if (!entity.Has<CharacterComponent>()) continue;
                 if (!entity.TryGet(out AnimationDataComponent anim_data)) continue;
-
+                
                 if (entity.Has<CharacterAttackEvent>())
                 {
                     PlayAnimation(entity, anim_data.AttackHash);
@@ -22,6 +22,10 @@ namespace ECSGame
                 else if (entity.Has<CharacterHealEvent>())
                 {
                     PlayAnimation(entity, anim_data.HealHash);
+                }
+                else if (entity.Has<DeathEvent>())
+                {
+                    PlayAnimation(entity, anim_data.DeathHash);
                 }
             }
         }

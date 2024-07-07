@@ -2,10 +2,12 @@
 
 namespace ECSGame
 {
-    public sealed class PlayerDeathSystem : DeathSystem
+    public sealed class PlayerDeathSystem : CharacterDeathSystem
     {
-        protected override void OnDie(IEntity entity)
+        protected override void OnDie(IContext context, IEntity entity)
         {
+            base.OnDie(context, entity);
+            
             if (entity.Has<PlayerMarker>() == false) return;
             
             
