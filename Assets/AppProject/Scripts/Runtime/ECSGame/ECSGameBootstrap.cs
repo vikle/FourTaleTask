@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using ECSCore;
+using Game;
 
 namespace ECSGame
 {
     [DisallowMultipleComponent]
     public sealed class ECSGameBootstrap : MonoBehaviour, IECSBootstrap
     {
-        
+        public CardGameTable cardGameTable;
         
         
         public void OnBootstrap(IContextBinding context)
@@ -22,6 +23,7 @@ namespace ECSGame
             context
                 .BindSystem<CharacterSystem>()
                 .BindSystem<HealingSystem>()
+                .BindSystem<CombatSystem>()
                 .BindSystem<DamageSystem>()
                 .BindSystem<DefenceBuffAddSystem>()
                 .BindSystem<DefenceBuffRemoveSystem>()
@@ -46,6 +48,7 @@ namespace ECSGame
                 .BindEvent<RemoveDefenceBuffEvent>()
                 .BindEvent<DefenceBuffChangedEvent>()
                 .BindEvent<HealEvent>()
+                .BindEvent<AttackEvent>()
                 .BindEvent<DamageEvent>()
                 .BindEvent<DeathEvent>()
                 .BindEvent<CharacterHealEvent>()
@@ -62,9 +65,11 @@ namespace ECSGame
                 .BindPromise<CharacterAttackPromise>()
                 .BindPromise<CharacterDefencePromise>()
                 ;
-            
-            
-            
+
+
+            context
+                .Inject(cardGameTable)
+                ;
         }
     };
 }

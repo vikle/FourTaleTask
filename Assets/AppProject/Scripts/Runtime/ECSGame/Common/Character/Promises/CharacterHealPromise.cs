@@ -1,13 +1,6 @@
-﻿using System.Collections.Generic;
-using ECSCore;
-
-namespace ECSGame
+﻿namespace ECSGame
 {
-    public sealed class CharacterHealPromise : IPromise
+    public sealed class CharacterHealPromise : CharacterBattlePromise
     {
-        public bool IsFulfilled { get; set; }
-        public List<IEvent> Resolve { get; } = new();
-
-        public float eventTriggerTime;
     };
 }

@@ -1,14 +1,6 @@
-﻿using System.Collections.Generic;
-using ECSCore;
-
-namespace ECSGame
+﻿namespace ECSGame
 {
-    public sealed class CharacterAttackPromise : IPromise
+    public sealed class CharacterAttackPromise : CharacterBattlePromise
     {
-        public bool IsFulfilled { get; set; }
-        public List<IEvent> Resolve { get; } = new();
-
-        public float damage;
-        public readonly List<IEntity> targets = new();
     };
 }

@@ -2,8 +2,7 @@
 
 namespace ECSGame
 {
-    public sealed class CharacterDefenceEvent : IEvent
+    public sealed class CharacterDefenceEvent : CharacterBattleEvent
     {
-
     };
 }

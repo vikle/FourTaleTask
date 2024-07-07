@@ -1,9 +1,6 @@
-﻿using ECSCore;
-
-namespace ECSGame
+﻿namespace ECSGame
 {
-    public sealed class CharacterHealEvent : IEvent
+    public sealed class CharacterHealEvent : CharacterBattleEvent
     {
-        public float value;
     };
 }

@@ -10,6 +10,8 @@ namespace ECSGame
     [DisallowMultipleComponent]
     public sealed class CharacterComponent : EntityActorComponent
     {
+        public float damageEventDelay = 0.5f;
+        public float defenceEventDelay = 0.5f;
         public float healEventDelay = 0.5f;
     };
     
