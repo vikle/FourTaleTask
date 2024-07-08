@@ -1,16 +1,22 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace ECSCore
 {
     [RequireComponent(typeof(EntityActor))]
     public abstract class EntityActorComponent : MonoBehaviour, IComponent
     {
-        public EntityActor actor;
+        [SerializeField]EntityActor m_actor;
+        public EntityActor Actor
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => m_actor;
+        }
         
 #if UNITY_EDITOR
         protected virtual void OnValidate()
         {
-            if (actor == null) actor = GetComponent<EntityActor>();
+            if (m_actor == null) m_actor = GetComponent<EntityActor>();
         }
 #endif
     };

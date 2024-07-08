@@ -1,11 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace ECSCore
 {
     [DisallowMultipleComponent]
     public sealed class EntityActor : MonoBehaviour
     {
-        public IEntity Entity { get; private set; }
+        public IEntity Entity
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]get; 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]private set;
+        }
         
         EntityActorComponent[] m_attachedComponents;
 

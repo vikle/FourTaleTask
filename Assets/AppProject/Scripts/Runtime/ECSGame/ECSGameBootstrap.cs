@@ -39,8 +39,6 @@ namespace ECSGame
             context
                 .BindSystem<UI.HealthBarInitializeSystem>()
                 .BindSystem<UI.HealthBarSystem>()
-                .BindSystem<UI.DefenceBarInitializeSystem>()
-                .BindSystem<UI.DefenceBarSystem>()
                 ;
             
             context

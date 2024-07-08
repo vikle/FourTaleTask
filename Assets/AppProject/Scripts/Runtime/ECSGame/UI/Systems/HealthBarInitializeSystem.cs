@@ -7,9 +7,17 @@ namespace ECSGame.UI
         public void OnAfterEntityCreated(IContext context, IEntity entity)
         {
             if (!entity.TryGet(out HealthBarComponent health_bar)) return;
-            if (!entity.TryGet(out HealthComponent health)) return;
+
+            var bar = health_bar.Bar;
+
+            bar.SetActive(true);
             
-            health_bar.bar.SetPercentage(health.currentHealth / health.maxHealth);
+            if (entity.TryGet(out HealthComponent health))
+            {
+                bar.SetHealthBarPercentage(health.currentHealth / health.maxHealth);
+            }
+            
+            bar.SetDefenceBarPercentage(0f);
         }
     };
 }

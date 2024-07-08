@@ -1195,7 +1195,6 @@ GameObject:
   - component: {fileID: 7258677905706099166}
   - component: {fileID: 2587244186044482697}
   - component: {fileID: 3441922035692767279}
-  - component: {fileID: 4362761419416677409}
   - component: {fileID: 4652178554759203973}
   - component: {fileID: 3212445213514514135}
   m_Layer: 0
@@ -1268,7 +1267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c3698ebea4c4e129fa28f6b4eb3b9a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actor: {fileID: 184542191514228844}
+  m_actor: {fileID: 184542191514228844}
 --- !u!114 &2587244186044482697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1281,7 +1280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733bcd5a17ab4564ae2e95b844772fac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actor: {fileID: 184542191514228844}
+  m_actor: {fileID: 184542191514228844}
   maxHealth: 1000
   currentHealth: 1000
 --- !u!114 &3441922035692767279
@@ -1296,22 +1295,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcdabfd365e849f0bee14a7d68fe5f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actor: {fileID: 184542191514228844}
-  bar: {fileID: 2006485764313837606}
---- !u!114 &4362761419416677409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8028504333613449318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ffc2db333b840ec883b543087b3986c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actor: {fileID: 184542191514228844}
-  bar: {fileID: 2742259503559416925}
+  m_actor: {fileID: 184542191514228844}
+  m_bar: {fileID: 5834084079448277528}
 --- !u!114 &4652178554759203973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1324,7 +1309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75ffd2368864fcb854b699fb4111a36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actor: {fileID: 184542191514228844}
+  m_actor: {fileID: 184542191514228844}
   animator: {fileID: 3715820047659455768}
   idleName: Idle
   attackName: Attack
@@ -1343,10 +1328,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e9a87c0020f473e83a7b9d02f1130b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actor: {fileID: 184542191514228844}
+  m_actor: {fileID: 184542191514228844}
   damageEventDelay: 0.5
-  defenceEventDelay: 2
-  healEventDelay: 0.5
+  defenceEventDelay: 1.3
+  healEventDelay: 1.3
 --- !u!1 &8539148842809538833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1618,31 +1603,20 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c88ef8155cf0dc4696bb4a409e3df1d, type: 3}
---- !u!114 &2006485764313837606 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7465852091245364873, guid: 3c88ef8155cf0dc4696bb4a409e3df1d, type: 3}
-  m_PrefabInstance: {fileID: 8954405929735190191}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71eae3e1f78f6ce4d94f4b7b46ebfba2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2072347359427880288 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6955251286131250127, guid: 3c88ef8155cf0dc4696bb4a409e3df1d, type: 3}
   m_PrefabInstance: {fileID: 8954405929735190191}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2742259503559416925 stripped
+--- !u!114 &5834084079448277528 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6506020022372887282, guid: 3c88ef8155cf0dc4696bb4a409e3df1d, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3220817344641283255, guid: 3c88ef8155cf0dc4696bb4a409e3df1d, type: 3}
   m_PrefabInstance: {fileID: 8954405929735190191}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71eae3e1f78f6ce4d94f4b7b46ebfba2, type: 3}
+  m_Script: {fileID: 11500000, guid: e22cd13673d241e8a8f1cf05ce0219c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!43 &3525128819912996300

@@ -24,7 +24,7 @@ namespace ECSGame
         void OnEnable()
         {
             target = (HealthComponent)base.target;
-            m_targetEntity = target.actor.Entity;
+            m_targetEntity = target.Actor.Entity;
         }
 
         public override void OnInspectorGUI()
