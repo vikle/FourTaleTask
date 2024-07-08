@@ -2,7 +2,7 @@
 {
     public sealed class EntityFactory : ObjectPool<IEntity>
     {
-        public static T GetInstance<T>() where T : class, IEntity
+        public static T GetInstance<T>() where T : class, IEntity, new()
         {
             return GetInstanceInternal<T>();
         }

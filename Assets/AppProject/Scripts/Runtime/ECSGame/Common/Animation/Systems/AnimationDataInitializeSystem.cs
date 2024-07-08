@@ -16,6 +16,9 @@ namespace ECSGame
             anim_data.DefenceHash = Animator.StringToHash(anim_comp.defenceName);
             anim_data.HealHash = Animator.StringToHash(anim_comp.healName);
             anim_data.DeathHash = Animator.StringToHash(anim_comp.deathName);
+
+            var play_anim_event = entity.Trigger<PlayAnimationEvent>();
+            play_anim_event.stateNameHash = anim_data.IdleHash;
         }
     };
 }

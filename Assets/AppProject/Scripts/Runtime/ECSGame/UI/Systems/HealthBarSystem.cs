@@ -20,6 +20,7 @@ namespace ECSGame.UI
 
             if (entity.Has<DeathEvent>())
             {
+                health_bar.Bar.SetActive(false);
                 health_bar.Bar.SetHealthBarPercentage(0f);
                 return;
             }

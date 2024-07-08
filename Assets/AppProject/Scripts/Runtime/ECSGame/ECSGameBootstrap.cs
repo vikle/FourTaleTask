@@ -21,7 +21,7 @@ namespace ECSGame
                 ;
             
             context
-                .BindSystem<CharacterSystem>()
+                .BindSystem<CharacterBattleSystem>()
                 .BindSystem<HealingSystem>()
                 .BindSystem<CombatSystem>()
                 .BindSystem<DamageSystem>()

@@ -5,9 +5,9 @@ namespace ECSCore
 {
     public abstract class ObjectPool<TType> where TType : class
     {
-        static readonly Dictionary<Type, Stack<TType>> sr_pool = new(8);
+        static readonly Dictionary<Type, Stack<TType>> sr_pool = new(64);
         
-        protected static TValue GetInstanceInternal<TValue>() where TValue : class, TType
+        protected static TValue GetInstanceInternal<TValue>() where TValue : class, TType, new()
         {
             var pool_type = typeof(TValue);
 
@@ -17,12 +17,12 @@ namespace ECSCore
             {
                 instance = (stack.Count > 0) 
                     ? (TValue)stack.Pop() 
-                    : Activator.CreateInstance<TValue>();
+                    : new();
             }
             else
             {
-                instance = Activator.CreateInstance<TValue>();
-                sr_pool[pool_type] = new(8);
+                instance = new();
+                sr_pool[pool_type] = new();
             }
             
             return instance;
@@ -34,7 +34,7 @@ namespace ECSCore
 
             if (sr_pool.TryGetValue(pool_type, out var stack) == false)
             {
-                stack = new(8);
+                stack = new();
                 sr_pool[pool_type] = stack;
             }
             

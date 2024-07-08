@@ -12,12 +12,12 @@ namespace ECSCore
             return m_fragmentsMap.ContainsKey(typeof(T));
         }
 
-        public T Trigger<T>() where T : class, IEvent
+        public T Trigger<T>() where T : class, IEvent, new()
         {
             return Add<T>();
         }
         
-        public T Then<T>() where T : class, IPromise
+        public T Then<T>() where T : class, IPromise, new()
         {
             return Add<T>();
         }
@@ -30,7 +30,7 @@ namespace ECSCore
             }
         }
         
-        public T Add<T>() where T : class, IFragment
+        public T Add<T>() where T : class, IFragment, new()
         {
             var type = typeof(T);
             
