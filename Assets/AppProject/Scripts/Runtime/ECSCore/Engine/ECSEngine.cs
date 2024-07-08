@@ -2,8 +2,7 @@ using UnityEngine;
 
 namespace ECSCore
 {
-    [DisallowMultipleComponent]
-    [DefaultExecutionOrder(-1)]
+    [DefaultExecutionOrder(-100), DisallowMultipleComponent]
     public sealed class ECSEngine : MonoBehaviour
     {
         public MonoBehaviour bootstrap;

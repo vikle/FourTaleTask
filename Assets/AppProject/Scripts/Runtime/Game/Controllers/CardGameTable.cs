@@ -9,18 +9,35 @@ using UnityEditor;
 
 namespace Game
 {
-    [DisallowMultipleComponent]
+    [DefaultExecutionOrder(-1), DisallowMultipleComponent]
     public sealed class CardGameTable : MonoBehaviour
     {
+        public static CardGameTable Instance { get; private set; }
+        
+        [Space]
+        public HandSightPointer handSightPointer;
+        [Space]
         public EntityActor playerActor;
         public List<EntityActor> enemyActors;
+        
+        [Space]
+        public int startupCardsCount = 5;
+        public int maxCardsCount = 10;
+        public Card[] allAvailableCards;
         
         public List<IEntity> AllPlayers { get; } = new();
         public IEntity CurrentPlayer { get; private set; }
         public List<IEntity> CurrentOpponents { get; } = new();
 
+        public List<Card> DrawDeck { get; } = new();
+        public List<Card> HandDeck { get; } = new();
+        public List<Card> DiscardDeck { get; } = new();
+        
+        public bool AttackCardsIsRequireTarget => (CurrentOpponents.Count > 1);
+        
         void Awake()
         {
+            Instance = this;
             InitActors();
             InitPlayers();
         }
@@ -62,6 +79,18 @@ namespace Game
                 var real_player = AllPlayers.Find(player => player.Has<PlayerMarker>());
                 CurrentOpponents.Add(real_player);
             }
+        }
+        
+        public void TryPlayCard(Card card)
+        {
+            var card_effects = card.effects;
+
+            for (int i = 0, i_max = card_effects.Length; i < i_max; i++)
+            {
+                card_effects[i].Apply(CurrentPlayer, CurrentOpponents);
+            }
+        
+            HandDeck.Remove(card);
         }
 
         public void OnPlayerDead(IEntity entity)
