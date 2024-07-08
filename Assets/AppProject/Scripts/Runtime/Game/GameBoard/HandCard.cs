@@ -100,7 +100,7 @@ namespace Game
             float move_step = (deltaTime * moveSpeed);
             float scale_step = (deltaTime * 4f);
 
-            if (not_focus_or_drag == false)
+            if (!not_focus_or_drag)
             {
                 move_step *= 2f;
                 scale_step *= 2f;
@@ -137,7 +137,7 @@ namespace Game
             m_localMousePos = anchor_pos;
 
             bool is_require_target = (CardGameTable.Instance.AttackCardsIsRequireTarget && Card.IsRequireTarget());
-            bool draw_sight_mode = (is_require_target && rt.rect.Contains(anchor_pos) == false);
+            bool draw_sight_mode = (is_require_target && !rt.rect.Contains(anchor_pos));
             m_isCardInGame = draw_sight_mode;
 
             if (draw_sight_mode) anchor_pos = new(anchor_pos.x * 0.016f, sightModeYOffset);

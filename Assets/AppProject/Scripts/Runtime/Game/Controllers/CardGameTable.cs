@@ -38,8 +38,12 @@ namespace Game
         void Awake()
         {
             Instance = this;
+            
             InitActors();
             InitPlayers();
+
+            InitDeckCards();
+            InitHandCards();
         }
 
         private void InitActors()
@@ -58,6 +62,25 @@ namespace Game
                 var entity = enemyActors[i].Entity;
                 CurrentOpponents.Add(entity);
                 AllPlayers.Add(entity);
+            }
+        }
+        
+        private void InitDeckCards()
+        {
+            DrawDeck.AddRange(allAvailableCards);
+        }
+        
+        private void InitHandCards()
+        {
+            var draw_deck = DrawDeck;
+            var hand_deck = HandDeck;
+        
+            for (int i = 0; i < startupCardsCount; i++)
+            {
+                int random_index = Random.Range(0, draw_deck.Count);
+                var random_card = draw_deck[random_index];
+                hand_deck.Add(random_card);
+                draw_deck.Remove(random_card);
             }
         }
         

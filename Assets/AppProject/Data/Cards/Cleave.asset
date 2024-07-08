@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d95061e681204313978cc363859bb14a, type: 3}
+  m_Name: Cleave
+  m_EditorClassIdentifier: 
+  cost: 1
+  effects:
+  - {fileID: 11400000, guid: c2fcadd3852f99e478985d9fccd6b727, type: 2}
+  background: {fileID: 21300000, guid: 1474621a925fd084c8b852e91820f223, type: 3}

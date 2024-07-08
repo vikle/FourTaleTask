@@ -8,6 +8,7 @@ namespace Game
         public SpriteRenderer spriteRenderer;
         [Range(0f, 1f)]public float percentage = 0.7f;
 
+        bool m_inited;
         Material m_material;
         static readonly int sr_percentage = Shader.PropertyToID("_Percentage");
 
@@ -19,15 +20,18 @@ namespace Game
             m_material.SetFloat(sr_percentage, percentage);
         }
 #endif
-        void Awake()
-        {
-            m_material = spriteRenderer.material;
-        }
-
         public void SetPercentage(float value)
         {
+            InitMaterial();
             percentage = value;
             m_material.SetFloat(sr_percentage, value);
+        }
+
+        private void InitMaterial()
+        {
+            if (m_inited) return;
+            m_inited = true;
+            m_material = spriteRenderer.material;
         }
     };
 }

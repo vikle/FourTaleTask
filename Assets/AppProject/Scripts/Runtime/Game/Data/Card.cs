@@ -16,7 +16,8 @@ namespace Game
         {
             for (int i = 0, i_max = effects.Length; i < i_max; i++)
             {
-                if (effects[i].isRequireTarget) return true;
+                var effect_target = effects[i].target;
+                if (effect_target == ECardEffectTarget.SelectedOpponent) return true;
             }
         
             return false;
