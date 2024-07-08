@@ -1,49 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ECSCore
 {
-    [DisallowMultipleComponent]
-    public sealed class EntityActor : MonoBehaviour, IEntity
+    public sealed class Entity : IEntity
     {
         readonly Dictionary<Type, IFragment> m_fragmentsMap = new(8);
-        EntityActorComponent[] m_attachedComponents;
-
-        void Awake()
-        {
-            m_attachedComponents = GetComponents<EntityActorComponent>();
-        }
-
-        void OnEnable()
-        {
-            for (int i = 0, i_max = m_attachedComponents.Length; i < i_max; i++)
-            {
-                var instance = m_attachedComponents[i];
-                m_fragmentsMap[instance.GetType()] = instance;
-            }
-
-            ECSEngine.Context.AddEntity(this);
-        }
-
-        void OnDisable()
-        {
-            ECSEngine.Context.RemoveEntity(this);
-            
-            for (int i = 0, i_max = m_attachedComponents.Length; i < i_max; i++)
-            {
-                var instance = m_attachedComponents[i];
-                m_fragmentsMap.Remove(instance.GetType());
-            }
-            
-            foreach (var instance in m_fragmentsMap.Values)
-            {
-                FragmentFactory.Release(instance);
-            }
-            
-            m_fragmentsMap.Clear();
-        }
-
+        
         public bool Has<T>() where T : class, IFragment
         {
             return m_fragmentsMap.ContainsKey(typeof(T));
@@ -85,7 +48,8 @@ namespace ECSCore
         public void Add<T>(T instance) where T : class, IFragment
         {
             if (instance == null) return;
-            m_fragmentsMap[instance.GetType()] = instance;
+            var type = instance.GetType();
+            m_fragmentsMap[type] = instance;
         }
 
         public bool TryGet<T>(out T fragment) where T : class, IFragment
@@ -111,6 +75,25 @@ namespace ECSCore
 
             FragmentFactory.Release(instance);
             m_fragmentsMap.Remove(type);
+        }
+        
+        public void Remove<T>(T instance) where T : class, IFragment
+        {
+            if (instance == null) return;
+            var type = instance.GetType();
+            m_fragmentsMap.Remove(type);
+        }
+
+        public void Dispose()
+        {
+            EntityFactory.Release(this);
+            
+            foreach (var instance in m_fragmentsMap.Values)
+            {
+                FragmentFactory.Release(instance);
+            }
+            
+            m_fragmentsMap.Clear();
         }
     };
 }

@@ -5,8 +5,6 @@ namespace ECSGame
 {
     public sealed class CharacterSystem : IUpdateSystem
     {
-        // readonly CardGameTable m_cardGameTable;
-        
         public void OnUpdate(IContext context)
         {
             foreach (var entity in context)

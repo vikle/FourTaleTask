@@ -19,10 +19,12 @@ namespace ECSGame
     public sealed class HealthComponentEditor : Editor
     {
         public new HealthComponent target;
+        IEntity m_targetEntity;
         
         void OnEnable()
         {
             target = (HealthComponent)base.target;
+            m_targetEntity = target.actor.Entity;
         }
 
         public override void OnInspectorGUI()
@@ -35,12 +37,12 @@ namespace ECSGame
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Damage_40%"))
             {
-                var dmg_evt = target.actor.Trigger<DamageEvent>();
+                var dmg_evt = m_targetEntity.Trigger<DamageEvent>();
                 dmg_evt.value = (target.maxHealth * 0.4f);
             }
             if (GUILayout.Button("Healing_40%"))
             {
-                var heal_evt = target.actor.Trigger<HealEvent>();
+                var heal_evt = m_targetEntity.Trigger<HealEvent>();
                 heal_evt.value = (target.maxHealth * 0.4f);
             }
             EditorGUILayout.EndHorizontal();
@@ -48,14 +50,13 @@ namespace ECSGame
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Buff_30%"))
             {
-                var add_buff_evt = target.actor.Trigger<AddDefenceBuffEvent>();
+                var add_buff_evt = m_targetEntity.Trigger<AddDefenceBuffEvent>();
                 add_buff_evt.initialValue = (target.maxHealth * 0.3f);
             }
             if (GUILayout.Button("DeBuff"))
             {
-                var actor = target.actor;
-                actor.Trigger<RemoveDefenceBuffEvent>();
-                actor.Trigger<DefenceBuffChangedEvent>();
+                m_targetEntity.Trigger<RemoveDefenceBuffEvent>();
+                m_targetEntity.Trigger<DefenceBuffChangedEvent>();
             }
             EditorGUILayout.EndHorizontal();
 

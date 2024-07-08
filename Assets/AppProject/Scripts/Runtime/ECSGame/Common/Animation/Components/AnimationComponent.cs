@@ -26,10 +26,12 @@ namespace ECSGame
     public sealed class AnimationComponentEditor : Editor
     {
         public new AnimationComponent target;
+        IEntity m_targetEntity;
         
         void OnEnable()
         {
             target = (AnimationComponent)base.target;
+            m_targetEntity = target.actor.Entity;
         }
 
         public override void OnInspectorGUI()
@@ -65,8 +67,8 @@ namespace ECSGame
 
         private void PlayAnim(string animName)
         {
-            var play_anim_evt = target.actor.Trigger<PlayAnimationEvent>();
-            target.actor.TryGet(out AnimationDataComponent anim_data);
+            var play_anim_evt = m_targetEntity.Trigger<PlayAnimationEvent>();
+            m_targetEntity.TryGet(out AnimationDataComponent anim_data);
 
             play_anim_evt.stateNameHash = animName switch
             {

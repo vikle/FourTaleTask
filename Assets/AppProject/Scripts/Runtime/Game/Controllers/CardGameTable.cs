@@ -21,13 +21,29 @@ namespace Game
 
         void Awake()
         {
-            CurrentPlayer = playerActor;
-            CurrentOpponents.AddRange(enemyActors);
-            AllPlayers.Add(playerActor);
-            AllPlayers.AddRange(enemyActors);
+            InitActors();
+            InitPlayers();
         }
 
+        private void InitActors()
+        {
+            playerActor.InitEntity();
+            enemyActors.ForEach(actor => actor.InitEntity());
+        }
 
+        private void InitPlayers()
+        {
+            CurrentPlayer = playerActor.Entity;
+            AllPlayers.Add(CurrentPlayer);
+            
+            for (int i = 0, i_max = enemyActors.Count; i < i_max; i++)
+            {
+                var entity = enemyActors[i].Entity;
+                CurrentOpponents.Add(entity);
+                AllPlayers.Add(entity);
+            }
+        }
+        
         public void NextTurn()
         {
             int current_player_index = AllPlayers.IndexOf(CurrentPlayer);
