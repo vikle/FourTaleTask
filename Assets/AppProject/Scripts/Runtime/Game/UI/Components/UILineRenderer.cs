@@ -6,11 +6,12 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CanvasRenderer))]
 public sealed class UILineRenderer : Graphic
 {
+    public Sprite sprite;
     public Vector2[] points = Array.Empty<Vector2>();
 
     public float thickness = 10f;
     public bool center = true;
-
+    
     protected override void OnPopulateMesh(VertexHelper vh)
     {
         vh.Clear();

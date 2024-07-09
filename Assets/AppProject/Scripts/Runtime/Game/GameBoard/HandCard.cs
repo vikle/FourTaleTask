@@ -30,7 +30,7 @@ namespace Game
         bool m_isFocus;
         bool m_isDrag;
         bool m_isMouseEnter;
-        bool m_isPrevCardInGame;
+        bool m_isSightActive;
         bool m_isCardInGame;
         RectTransform m_transform;
         float m_startWidth;
@@ -87,12 +87,6 @@ namespace Game
                 m_currentRotate = new(0f, 0f, not_focus_or_drag ? DeckAngle : 0f);
             }
 
-            if (m_isPrevCardInGame != m_isCardInGame)
-            {
-                m_isPrevCardInGame = m_isCardInGame;
-                SetSightActive(m_isCardInGame);
-            }
-
             var target_size = not_focus_or_drag
                 ? m_startScale
                 : (m_startScale * focusScale);
@@ -139,16 +133,22 @@ namespace Game
             bool is_card_in_game = !rt.rect.Contains(anchor_pos);
             m_isCardInGame = is_card_in_game;
 
-            if (is_card_in_game && Card.IsRequireTarget() && CardGameTable.Instance.IsMoreOneTarget)
+            bool is_sight_active = (is_card_in_game && Card.IsRequireTarget() && CardGameTable.Instance.IsMoreOneTarget);
+            
+            if (is_sight_active)
             {
                 anchor_pos = new(anchor_pos.x * 0.016f, sightModeYOffset);
             }
+            
+            SetSightActive(is_sight_active);
 
             return anchor_pos;
         }
 
         private void SetSightActive(bool value)
         {
+            if (m_isSightActive == value) return;
+            m_isSightActive = value;
             HandCardArea.handFingerLine.SetActive(value);
             CardGameTable.Instance.handSightPointer.SetActive(value);
         }
@@ -241,9 +241,10 @@ namespace Game
 
         private void TryPlayCard()
         {
-            Debug.Log($"TryPlayCard.{Card.name}");
-            bool card_is_played = CardGameTable.Instance.TryPlayCard(Card);
-            Debug.Log($"Card.{Card.name}.Is={card_is_played}");
+            if (!CardGameTable.Instance.TryPlayCard(Card)) return;
+            HandCardArea.DiscardCard(this);
+            m_isMouseEnter = false;
+            SetSightActive(false);
         }
     };
 }

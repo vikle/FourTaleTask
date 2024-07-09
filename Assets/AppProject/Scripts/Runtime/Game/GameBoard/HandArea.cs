@@ -17,62 +17,67 @@ namespace Game
         [Space]
         public HandFingerLine handFingerLine;
 
-        List<HandCard> m_cards;
+        readonly List<HandCard> m_handCards = new(5);
+        readonly Stack<HandCard> m_cardsPool = new(5);
+        Transform m_cardsParent;
 
         void Awake()
         {
+            m_cardsParent = cardPrefab.transform.parent;
             HandCard.SelectedIndex = -1;
             handFingerLine.Init();
+            m_cardsPool.Push(cardPrefab);
         }
 
         void Start()
         {
-            var cards_parent = cardPrefab.transform.parent;
-
             var hand_deck = CardGameTable.Instance.HandDeck;
-
-            m_cards = new(hand_deck.Count);
-
+            
             for (int i = 0, i_max = hand_deck.Count; i < i_max; i++)
             {
                 var card = hand_deck[i];
-
-                var hand_card = (i == 0)
-                    ? cardPrefab
-                    : Instantiate(cardPrefab, cards_parent);
-
-                hand_card.Card = card;
-                hand_card.Index = i;
-                hand_card.HandCardArea = this;
-                hand_card.HandTransform = handTransform;
-                hand_card.gameObject.SetActive(true);
-
-                m_cards.Add(hand_card);
-            }
-
-            for (int i = 0, i_max = m_cards.Count; i < i_max; i++)
-            {
-                m_cards[i].GetComponent<UI.HandCardUI>().Init();
+                DrawCard(card);
             }
         }
 
+        private void DrawCard(Card card)
+        {
+            var hand_card = GetHandCardInstance();
+            hand_card.Card = card;
+            hand_card.Index = m_handCards.Count;
+            hand_card.HandCardArea = this;
+            hand_card.HandTransform = handTransform;
+            hand_card.gameObject.SetActive(true);
+            
+            m_handCards.Add(hand_card);
+            
+            hand_card.GetComponent<UI.HandCardUI>().Init();
+        }
+
+        private HandCard GetHandCardInstance()
+        {
+            return (m_cardsPool.Count > 0) 
+                ? m_cardsPool.Pop() 
+                : Instantiate(cardPrefab, m_cardsParent);
+        }
+        
         void Update()
         {
             float delta_time = Time.deltaTime;
 
-            int cards_count = m_cards.Count;
+            int cards_count = m_handCards.Count;
             int selected_index = HandCard.SelectedIndex;
 
             for (int i = 0; i < cards_count; i++)
             {
-                var card = m_cards[i];
+                var card = m_handCards[i];
 
                 float card_size = (i - (cards_count - 1) / 2f);
                 float deck_x = (card_size * cardSpacing);
 
                 if (selected_index != -1 && i != selected_index)
                 {
-                    var sel_card = m_cards[selected_index];
+                    var sel_card = m_handCards[selected_index];
 
                     float width_dif = (sel_card.Width - card.Width);
                     float deck_x_offset = (width_dif + cardSpacing * 0.5f + Mathf.Abs(sel_card.DeckAngle));
@@ -104,19 +109,26 @@ namespace Game
 
         public void SortCards()
         {
-            m_cards.Sort((a, b) => a.WorldPositionX.CompareTo(b.WorldPositionX));
+            m_handCards.Sort((a, b) => a.WorldPositionX.CompareTo(b.WorldPositionX));
 
-            for (int i = 0, i_max = m_cards.Count; i < i_max; i++)
+            for (int i = 0, i_max = m_handCards.Count; i < i_max; i++)
             {
-                var card = m_cards[i];
+                var card = m_handCards[i];
                 card.Index = i;
                 card.SetTransformSiblingIndex(i);
             }
         }
 
-        public void ToForeground(HandCard card)
+        public void ToForeground(HandCard handCard)
         {
-            card.SetTransformSiblingIndex(m_cards.Count - 1);
+            handCard.SetTransformSiblingIndex(m_handCards.Count - 1);
+        }
+
+        public void DiscardCard(HandCard handCard)
+        {
+            m_handCards.Remove(handCard);
+            m_cardsPool.Push(handCard);
+            handCard.gameObject.SetActive(false);
         }
     };
 }
