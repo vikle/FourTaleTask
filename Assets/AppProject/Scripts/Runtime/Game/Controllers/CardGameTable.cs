@@ -12,17 +12,16 @@ namespace Game
     [DefaultExecutionOrder(-1), DisallowMultipleComponent]
     public sealed class CardGameTable : MonoBehaviour
     {
-        public static CardGameTable Instance { get; private set; }
-        
         [Space]
         public HandSightPointer handSightPointer;
+        
         [Space]
         public EntityActor playerActor;
         public List<EntityActor> enemyActors;
         
         [Space]
         public int startupCardsCount = 5;
-        public int maxCardsCount = 10;
+        public int startupEnergyCount = 3;
         public Card[] allAvailableCards;
         
         public List<IEntity> AllPlayers { get; } = new();
@@ -35,13 +34,14 @@ namespace Game
         
         public bool IsMoreOneTarget => (CurrentOpponents.Count > 1);
         
+        public int PlayerEnergyCount { get; private set; }
+        
         void Awake()
         {
-            Instance = this;
-            
             InitActors();
             InitPlayers();
 
+            InitCards();
             InitDeckCards();
             InitHandCards();
         }
@@ -54,6 +54,8 @@ namespace Game
 
         private void InitPlayers()
         {
+            PlayerEnergyCount = startupEnergyCount;
+            
             CurrentPlayer = playerActor.Entity;
             AllPlayers.Add(CurrentPlayer);
             
@@ -64,6 +66,21 @@ namespace Game
                 AllPlayers.Add(entity);
             }
         }
+
+        private void InitCards()
+        {
+            for (int i = 0, i_max = allAvailableCards.Length; i < i_max; i++)
+            {
+                var card = allAvailableCards[i];
+                var card_effects = card.effects;
+                
+                for (int j = 0, j_max = card_effects.Length; j < j_max; j++)
+                {
+                    var effect = card_effects[j];
+                    effect.Table = this;
+                }
+            }
+        }
         
         private void InitDeckCards()
         {
@@ -72,20 +89,26 @@ namespace Game
         
         private void InitHandCards()
         {
-            var draw_deck = DrawDeck;
-            var hand_deck = HandDeck;
-        
             for (int i = 0; i < startupCardsCount; i++)
             {
-                int random_index = Random.Range(0, draw_deck.Count);
-                var random_card = draw_deck[random_index];
-                hand_deck.Add(random_card);
-                draw_deck.Remove(random_card);
+                DrawRandomCard();
             }
+            
+            EventBus.Trigger(EventHooks.k_CardGameTableOnCardsUpdated, this);
+        }
+
+        private void DrawRandomCard()
+        {
+            int random_index = Random.Range(0, DrawDeck.Count);
+            var random_card = DrawDeck[random_index];
+            HandDeck.Add(random_card);
+            DrawDeck.Remove(random_card);
         }
         
         public void NextTurn()
         {
+            PlayerEnergyCount = 0;
+            
             int current_player_index = AllPlayers.IndexOf(CurrentPlayer);
             int next_player_index = (++current_player_index % AllPlayers.Count);
             CurrentPlayer = AllPlayers[next_player_index];
@@ -94,6 +117,7 @@ namespace Game
             
             if (CurrentPlayer.Has<PlayerMarker>())
             {
+                PlayerEnergyCount = startupEnergyCount;
                 CurrentOpponents.AddRange(AllPlayers);
                 CurrentOpponents.RemoveAt(next_player_index);
             }
@@ -122,6 +146,10 @@ namespace Game
             }
         
             HandDeck.Remove(card);
+            DiscardDeck.Add(card);
+            
+            EventBus.Trigger(EventHooks.k_CardGameTableOnCardsUpdated, this);
+            
             return true;
         }
 

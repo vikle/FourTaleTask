@@ -18,6 +18,7 @@ namespace Game
         public float DeckAngle { get; set; }
         public RectTransform HandTransform { get; set; }
         public HandArea HandCardArea { get; set; }
+        public CardGameTable Table { get; set; }
 
         public float Width { get; private set; }
         public float WorldPositionX { get; private set; }
@@ -133,7 +134,9 @@ namespace Game
             bool is_card_in_game = !rt.rect.Contains(anchor_pos);
             m_isCardInGame = is_card_in_game;
 
-            bool is_sight_active = (is_card_in_game && Card.IsRequireTarget() && CardGameTable.Instance.IsMoreOneTarget);
+            bool is_sight_active = (is_card_in_game 
+                                 && Card.IsRequireTarget() 
+                                 && Table.IsMoreOneTarget);
             
             if (is_sight_active)
             {
@@ -150,7 +153,7 @@ namespace Game
             if (m_isSightActive == value) return;
             m_isSightActive = value;
             HandCardArea.handFingerLine.SetActive(value);
-            CardGameTable.Instance.handSightPointer.SetActive(value);
+            Table.handSightPointer.SetActive(value);
         }
 
         private void DrawSight()
@@ -241,7 +244,7 @@ namespace Game
 
         private void TryPlayCard()
         {
-            if (!CardGameTable.Instance.TryPlayCard(Card)) return;
+            if (!Table.TryPlayCard(Card)) return;
             HandCardArea.DiscardCard(this);
             m_isMouseEnter = false;
             SetSightActive(false);

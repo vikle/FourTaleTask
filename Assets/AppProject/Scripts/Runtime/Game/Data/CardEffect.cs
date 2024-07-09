@@ -17,13 +17,15 @@ namespace Game
     // [CreateAssetMenu(fileName = "CardEffect", menuName = "CardGame/CardEffect", order = 51)]
     public abstract class CardEffect : ScriptableObject
     {
+        public CardGameTable Table { get; set; }
+        
         public ECardEffectTarget target;
         public float effectValue = 300f;
-        
+
         [Header("UI")]
         [TextArea(5, 8)]
         public string description;
-        
+
         public abstract void Apply(IEntity owner, List<IEntity> opponents);
 
         protected static readonly StringBuilder sr_stringBuilder = new(128);

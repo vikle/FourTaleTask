@@ -324,6 +324,51 @@ Transform:
   - {fileID: 1259861917}
   m_Father: {fileID: 579794037}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &104911253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 104911255}
+  - component: {fileID: 104911254}
+  m_Layer: 0
+  m_Name: GameController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &104911254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104911253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 203a8a1634e64261b3fbc44dedbbc758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardGameTable: {fileID: 1462890987}
+--- !u!4 &104911255
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104911253}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &114778422
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +409,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 218126128}
+  - component: {fileID: 218126129}
   m_Layer: 5
   m_Name: GameHUD
   m_TagString: Untagged
@@ -394,6 +440,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &218126129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218126127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e61381ba8f74e96a057ac13ba5d3d9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawDeckCountText: {fileID: 324809309}
+  discardDeckCountText: {fileID: 1034929244}
+  energyCountText: {fileID: 1549135790}
 --- !u!1 &240052882
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,6 +800,7 @@ GameObject:
   - component: {fileID: 324809306}
   - component: {fileID: 324809308}
   - component: {fileID: 324809307}
+  - component: {fileID: 324809309}
   m_Layer: 5
   m_Name: DrawDeck
   m_TagString: Untagged
@@ -804,6 +866,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324809305}
   m_CullTransparentMesh: 1
+--- !u!114 &324809309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324809305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6854911c65324601979ecedf41b82406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 1611118926}
 --- !u!1 &463857671
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,6 +1755,7 @@ GameObject:
   - component: {fileID: 1034929241}
   - component: {fileID: 1034929243}
   - component: {fileID: 1034929242}
+  - component: {fileID: 1034929244}
   m_Layer: 5
   m_Name: DiscardDeck
   m_TagString: Untagged
@@ -1745,6 +1821,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1034929240}
   m_CullTransparentMesh: 1
+--- !u!114 &1034929244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034929240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6854911c65324601979ecedf41b82406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 1047060252}
 --- !u!1 &1047060250
 GameObject:
   m_ObjectHideFlags: 0
@@ -2441,6 +2530,7 @@ GameObject:
   - component: {fileID: 1549135787}
   - component: {fileID: 1549135789}
   - component: {fileID: 1549135788}
+  - component: {fileID: 1549135790}
   m_Layer: 5
   m_Name: Energy
   m_TagString: Untagged
@@ -2506,6 +2596,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1549135786}
   m_CullTransparentMesh: 1
+--- !u!114 &1549135790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549135786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6854911c65324601979ecedf41b82406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 512262064}
 --- !u!114 &1560397565 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3844729819337633055, guid: e423bfa6618ecb244a50f32881346436, type: 3}
@@ -3114,6 +3217,7 @@ SceneRoots:
   - {fileID: 1199010473}
   - {fileID: 1447049163}
   - {fileID: 665743702}
+  - {fileID: 104911255}
   - {fileID: 1462890988}
   - {fileID: 240052883}
   - {fileID: 2092997183}

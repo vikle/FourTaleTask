@@ -21,7 +21,7 @@ namespace Game
                 case ECardEffectTarget.SelectedOpponent:
                     if (opponents.Count > 1)
                     {
-                        var pointer = CardGameTable.Instance.handSightPointer;
+                        var pointer = Table.handSightPointer;
 
                         if (pointer.IsHaveHit && pointer.HitObject.TryGetComponent(out EntityActor enemy_actor))
                         {

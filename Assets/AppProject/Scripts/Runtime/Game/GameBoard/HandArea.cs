@@ -20,6 +20,7 @@ namespace Game
         readonly List<HandCard> m_handCards = new(5);
         readonly Stack<HandCard> m_cardsPool = new(5);
         Transform m_cardsParent;
+        CardGameTable m_table;
 
         void Awake()
         {
@@ -31,7 +32,8 @@ namespace Game
 
         void Start()
         {
-            var hand_deck = CardGameTable.Instance.HandDeck;
+            m_table = GameController.Controllers.Table;
+            var hand_deck = m_table.HandDeck;
             
             for (int i = 0, i_max = hand_deck.Count; i < i_max; i++)
             {
@@ -47,6 +49,7 @@ namespace Game
             hand_card.Index = m_handCards.Count;
             hand_card.HandCardArea = this;
             hand_card.HandTransform = handTransform;
+            hand_card.Table = m_table;
             hand_card.gameObject.SetActive(true);
             
             m_handCards.Add(hand_card);
