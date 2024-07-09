@@ -33,7 +33,7 @@ namespace Game
         public List<Card> HandDeck { get; } = new();
         public List<Card> DiscardDeck { get; } = new();
         
-        public bool AttackCardsIsRequireTarget => (CurrentOpponents.Count > 1);
+        public bool IsMoreOneTarget => (CurrentOpponents.Count > 1);
         
         void Awake()
         {
@@ -104,8 +104,16 @@ namespace Game
             }
         }
         
-        public void TryPlayCard(Card card)
+        public bool TryPlayCard(Card card)
         {
+            if (card.IsRequireTarget() && IsMoreOneTarget)
+            {
+                if (!handSightPointer.IsHaveHit)
+                {
+                    return false;
+                }
+            }
+            
             var card_effects = card.effects;
 
             for (int i = 0, i_max = card_effects.Length; i < i_max; i++)
@@ -114,6 +122,7 @@ namespace Game
             }
         
             HandDeck.Remove(card);
+            return true;
         }
 
         public void OnPlayerDead(IEntity entity)
@@ -121,28 +130,6 @@ namespace Game
             AllPlayers.Remove(entity);
             CurrentOpponents.Remove(entity);
         }
-        
-        public void PlayAttack(float damage)
-        {
-            var attack_event = CurrentPlayer.Trigger<CharacterAttackEvent>();
-            attack_event.value = damage;
-            var attack_targets = attack_event.targets;
-            attack_targets.Clear();
-            attack_targets.AddRange(CurrentOpponents);
-        }
-        
-        public void PlayDefence(float value)
-        {
-            var defence_event = CurrentPlayer.Trigger<CharacterDefenceEvent>();
-            defence_event.value = value;
-        }
-        
-        public void PlayHeal(float value)
-        {
-            var heal_event = CurrentPlayer.Trigger<CharacterHealEvent>();
-            heal_event.value = value;
-        }
-        
     };
     
 #if UNITY_EDITOR
@@ -172,20 +159,41 @@ namespace Game
             
             if (GUILayout.Button("Attack_400hp"))
             {
-                target.PlayAttack(400f);
+                PlayAttack(400f);
             }
             
             if (GUILayout.Button("Defence_300hp"))
             {
-                target.PlayDefence(300f);
+                PlayDefence(300f);
             }
             
             if (GUILayout.Button("Heal_400hp"))
             {
-                target.PlayHeal(400f);
+                PlayHeal(400f);
             }
             
             GUI.enabled = true;
+        }
+        
+        private void PlayAttack(float damage)
+        {
+            var attack_event = target.CurrentPlayer.Trigger<CharacterAttackEvent>();
+            attack_event.value = damage;
+            var attack_targets = attack_event.targets;
+            attack_targets.Clear();
+            attack_targets.AddRange(target.CurrentOpponents);
+        }
+        
+        private void PlayDefence(float value)
+        {
+            var defence_event = target.CurrentPlayer.Trigger<CharacterDefenceEvent>();
+            defence_event.value = value;
+        }
+        
+        private void PlayHeal(float value)
+        {
+            var heal_event = target.CurrentPlayer.Trigger<CharacterHealEvent>();
+            heal_event.value = value;
         }
     };
 #endif

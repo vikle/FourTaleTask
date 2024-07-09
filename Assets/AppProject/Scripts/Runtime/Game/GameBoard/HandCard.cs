@@ -136,11 +136,13 @@ namespace Game
 
             m_localMousePos = anchor_pos;
 
-            bool is_require_target = (CardGameTable.Instance.AttackCardsIsRequireTarget && Card.IsRequireTarget());
-            bool draw_sight_mode = (is_require_target && !rt.rect.Contains(anchor_pos));
-            m_isCardInGame = draw_sight_mode;
+            bool is_card_in_game = !rt.rect.Contains(anchor_pos);
+            m_isCardInGame = is_card_in_game;
 
-            if (draw_sight_mode) anchor_pos = new(anchor_pos.x * 0.016f, sightModeYOffset);
+            if (is_card_in_game && Card.IsRequireTarget() && CardGameTable.Instance.IsMoreOneTarget)
+            {
+                anchor_pos = new(anchor_pos.x * 0.016f, sightModeYOffset);
+            }
 
             return anchor_pos;
         }
@@ -239,7 +241,9 @@ namespace Game
 
         private void TryPlayCard()
         {
-            CardGameTable.Instance.TryPlayCard(Card);
+            Debug.Log($"TryPlayCard.{Card.name}");
+            bool card_is_played = CardGameTable.Instance.TryPlayCard(Card);
+            Debug.Log($"Card.{Card.name}.Is={card_is_played}");
         }
     };
 }

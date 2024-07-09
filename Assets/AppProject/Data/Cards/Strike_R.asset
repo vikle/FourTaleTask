@@ -16,3 +16,4 @@ MonoBehaviour:
   effects:
   - {fileID: 11400000, guid: 16efc192a4d724a4989e5fd4160d0522, type: 2}
   background: {fileID: 21300000, guid: 853769d626693c349ae170b26f5e350b, type: 3}
+  description: "\u041D\u0430\u043D\u043E\u0441\u0438\u0442 \u0443\u0440\u043E\u043D"

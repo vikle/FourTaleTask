@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95061e681204313978cc363859bb14a, type: 3}
   m_Name: Cleave
   m_EditorClassIdentifier: 
-  cost: 1
+  cost: 2
   effects:
   - {fileID: 11400000, guid: c2fcadd3852f99e478985d9fccd6b727, type: 2}
   background: {fileID: 21300000, guid: 1474621a925fd084c8b852e91820f223, type: 3}
+  description: "\u041D\u0430\u043D\u043E\u0441\u0438\u0442 \u0443\u0440\u043E\u043D
+    \u0432\u0441\u0435\u043C \u0432\u0440\u0430\u0433\u0430\u043C"
