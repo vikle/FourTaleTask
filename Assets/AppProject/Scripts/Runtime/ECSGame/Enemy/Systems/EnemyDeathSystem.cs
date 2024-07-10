@@ -8,7 +8,7 @@ namespace ECSGame
         {
             base.OnDie(context, entity);
             
-            if (entity.Has<EnemyMarker>() == false) return;
+            if (!entity.Has<EnemyMarker>()) return;
             
             
         }

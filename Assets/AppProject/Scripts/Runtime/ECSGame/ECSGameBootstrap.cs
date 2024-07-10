@@ -28,6 +28,7 @@ namespace ECSGame
                 .BindSystem<DefenceBuffAddSystem>()
                 .BindSystem<DefenceBuffRemoveSystem>()
                 .BindSystem<PlayerDeathSystem>()
+                .BindSystem<EnemyIntentionSystem>()
                 .BindSystem<EnemyDeathSystem>()
                 ;
 
@@ -52,6 +53,8 @@ namespace ECSGame
                 .BindEvent<CharacterHealEvent>()
                 .BindEvent<CharacterAttackEvent>()
                 .BindEvent<CharacterDefenceEvent>()
+                .BindEvent<EnemyAddIntentionEvent>()
+                .BindEvent<EnemyPerformIntentionEvent>()
                 ;
             
             context

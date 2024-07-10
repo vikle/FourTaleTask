@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace Game
 {
@@ -27,6 +29,9 @@ namespace Game
         public static int DraggedIndex { get; set; }
         public static bool IsDragMode { get; set; }
 
+        [Space]
+        public UnityEvent onEnabled;
+        
         float m_focusTimer;
         bool m_isFocus;
         bool m_isDrag;
@@ -205,7 +210,7 @@ namespace Game
 
             if (m_isCardInGame)
             {
-                TryPlayCard();
+                Table.TryPlayCard(Card);
             }
 
             UnSelect();
@@ -242,10 +247,16 @@ namespace Game
             }
         }
 
-        private void TryPlayCard()
+        public void SetActive(bool value)
         {
-            if (!Table.TryPlayCard(Card)) return;
-            HandCardArea.DiscardCard(this);
+            gameObject.SetActive(value);
+
+            if (value)
+            {
+                onEnabled.Invoke();
+                return;
+            }
+            
             m_isMouseEnter = false;
             SetSightActive(false);
         }

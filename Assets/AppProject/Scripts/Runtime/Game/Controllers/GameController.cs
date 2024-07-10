@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using ECSCore;
 
@@ -9,13 +10,13 @@ namespace Game
     {
         // public static GameController Instance { get; private set; }
 
-        public CardGameTable cardGameTable;
         public AIController aiController;
-        
+        public CardGameTable cardGameTable;
+
         public struct SubControllers
         {
-            public CardGameTable Table { get; set; }
             public AIController AI { get; set; }
+            public CardGameTable Table { get; set; }
         }
 
         public static SubControllers Controllers => s_controllers;
@@ -24,18 +25,27 @@ namespace Game
         void Awake()
         {
             ref var c = ref s_controllers;
-            c.Table = cardGameTable;
-            c.AI = aiController;
             
+            c.AI = aiController;
+            c.Table = cardGameTable;
+
             aiController.Init(this);
+            cardGameTable.Init();
+            
+            EventBus.Register(EventHooks.k_OnGameControllerNextTurn, NextTurn);
+            
         }
 
+        void Start()
+        {
+            cardGameTable.PostInit();
+        }
 
         public void NextTurn()
         {
             cardGameTable.NextTurn();
         }
-        
+
         
         
     };

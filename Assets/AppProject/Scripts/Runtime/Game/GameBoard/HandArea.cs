@@ -17,44 +17,47 @@ namespace Game
         [Space]
         public HandFingerLine handFingerLine;
 
-        readonly List<HandCard> m_handCards = new(5);
         readonly Stack<HandCard> m_cardsPool = new(5);
+        readonly List<HandCard> m_handCards = new(5);
+        readonly Dictionary<Card, HandCard> m_handCardsMap = new(5);
         Transform m_cardsParent;
-        CardGameTable m_table;
 
         void Awake()
         {
             m_cardsParent = cardPrefab.transform.parent;
+            
             HandCard.SelectedIndex = -1;
+            
             handFingerLine.Init();
             m_cardsPool.Push(cardPrefab);
+            
+            EventBus.Register<CardGameTable>(EventHooks.k_OnCardGameTableCardsUpdated, OnCardGameTableCardsUpdated);
         }
 
-        void Start()
+        private void OnCardGameTableCardsUpdated(CardGameTable table)
         {
-            m_table = GameController.Controllers.Table;
-            var hand_deck = m_table.HandDeck;
+            var hand_deck = table.HandDeck;
             
             for (int i = 0, i_max = hand_deck.Count; i < i_max; i++)
             {
                 var card = hand_deck[i];
-                DrawCard(card);
+                DrawCard(card, table);
             }
         }
 
-        private void DrawCard(Card card)
+        private void DrawCard(Card card, CardGameTable table)
         {
             var hand_card = GetHandCardInstance();
+            
             hand_card.Card = card;
             hand_card.Index = m_handCards.Count;
-            hand_card.HandCardArea = this;
+            hand_card.SetTransformSiblingIndex(hand_card.Index);
             hand_card.HandTransform = handTransform;
-            hand_card.Table = m_table;
-            hand_card.gameObject.SetActive(true);
+            hand_card.HandCardArea = this;
+            hand_card.Table = table;
+            hand_card.SetActive(true);
             
             m_handCards.Add(hand_card);
-            
-            hand_card.GetComponent<UI.HandCardUI>().Init();
         }
 
         private HandCard GetHandCardInstance()
@@ -126,8 +129,8 @@ namespace Game
         {
             handCard.SetTransformSiblingIndex(m_handCards.Count - 1);
         }
-
-        public void DiscardCard(HandCard handCard)
+        
+        private void DiscardCard(HandCard handCard)
         {
             m_handCards.Remove(handCard);
             m_cardsPool.Push(handCard);

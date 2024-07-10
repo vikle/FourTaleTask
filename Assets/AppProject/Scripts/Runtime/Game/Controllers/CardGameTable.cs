@@ -9,7 +9,7 @@ using UnityEditor;
 
 namespace Game
 {
-    [DefaultExecutionOrder(-1), DisallowMultipleComponent]
+    [DefaultExecutionOrder(1), DisallowMultipleComponent]
     public sealed class CardGameTable : MonoBehaviour
     {
         [Space]
@@ -28,46 +28,32 @@ namespace Game
         public IEntity CurrentPlayer { get; private set; }
         public List<IEntity> CurrentOpponents { get; } = new();
 
-        public List<Card> DrawDeck { get; } = new();
-        public List<Card> HandDeck { get; } = new();
-        public List<Card> DiscardDeck { get; } = new();
+        public List<Card> DrawDeck { get; set; } = new();
+        public List<Card> HandDeck { get; set; } = new();
+        public List<Card> DiscardDeck { get; set; } = new();
         
         public bool IsMoreOneTarget => (CurrentOpponents.Count > 1);
         
-        public int PlayerEnergyCount { get; private set; }
-        
-        void Awake()
+        public int CurrentPlayerEnergyCount { get; private set; }
+
+        public void Init()
         {
+            InitCardsEffects();
+            InitDeckCards();
+            DrawCardsInHand();
+            
             InitActors();
             InitPlayers();
-
-            InitCards();
-            InitDeckCards();
-            InitHandCards();
         }
 
-        private void InitActors()
+        public void PostInit()
         {
-            playerActor.InitEntity();
-            enemyActors.ForEach(actor => actor.InitEntity());
+            EventBus.Trigger(EventHooks.k_OnCardGameTableCardsUpdated, this);
+            EventBus.Trigger(EventHooks.k_OnCardGameTablePlayerTurn, this);
+            EventBus.Trigger(EventHooks.k_OnCardGamePlayerEnergyUpdated, CurrentPlayerEnergyCount);
         }
-
-        private void InitPlayers()
-        {
-            PlayerEnergyCount = startupEnergyCount;
-            
-            CurrentPlayer = playerActor.Entity;
-            AllPlayers.Add(CurrentPlayer);
-            
-            for (int i = 0, i_max = enemyActors.Count; i < i_max; i++)
-            {
-                var entity = enemyActors[i].Entity;
-                CurrentOpponents.Add(entity);
-                AllPlayers.Add(entity);
-            }
-        }
-
-        private void InitCards()
+        
+        private void InitCardsEffects()
         {
             for (int i = 0, i_max = allAvailableCards.Length; i < i_max; i++)
             {
@@ -82,32 +68,37 @@ namespace Game
             }
         }
         
+        private void InitActors()
+        {
+            playerActor.InitEntity();
+            enemyActors.ForEach(actor => actor.InitEntity());
+        }
+
+        private void InitPlayers()
+        {
+            CurrentPlayerEnergyCount = startupEnergyCount;
+            
+            CurrentPlayer = playerActor.Entity;
+            AllPlayers.Add(CurrentPlayer);
+            
+            for (int i = 0, i_max = enemyActors.Count; i < i_max; i++)
+            {
+                var entity = enemyActors[i].Entity;
+                CurrentOpponents.Add(entity);
+                AllPlayers.Add(entity);
+            }
+        }
+
         private void InitDeckCards()
         {
             DrawDeck.AddRange(allAvailableCards);
         }
         
-        private void InitHandCards()
-        {
-            for (int i = 0; i < startupCardsCount; i++)
-            {
-                DrawRandomCard();
-            }
-            
-            EventBus.Trigger(EventHooks.k_CardGameTableOnCardsUpdated, this);
-        }
-
-        private void DrawRandomCard()
-        {
-            int random_index = Random.Range(0, DrawDeck.Count);
-            var random_card = DrawDeck[random_index];
-            HandDeck.Add(random_card);
-            DrawDeck.Remove(random_card);
-        }
-        
         public void NextTurn()
         {
-            PlayerEnergyCount = 0;
+            CurrentPlayerEnergyCount = 0;
+
+            var prev_player = CurrentPlayer;
             
             int current_player_index = AllPlayers.IndexOf(CurrentPlayer);
             int next_player_index = (++current_player_index % AllPlayers.Count);
@@ -117,24 +108,74 @@ namespace Game
             
             if (CurrentPlayer.Has<PlayerMarker>())
             {
-                PlayerEnergyCount = startupEnergyCount;
+                CurrentPlayerEnergyCount = startupEnergyCount;
+                
                 CurrentOpponents.AddRange(AllPlayers);
                 CurrentOpponents.RemoveAt(next_player_index);
+
+                DrawCardsInHand();
+                
+                EventBus.Trigger(EventHooks.k_OnCardGameTablePlayerTurn, this);
             }
             else if (CurrentPlayer.Has<EnemyMarker>())
             {
                 var real_player = AllPlayers.Find(player => player.Has<PlayerMarker>());
                 CurrentOpponents.Add(real_player);
             }
+            
+            if (prev_player.Has<PlayerMarker>())
+            {
+                DiscardHandCards();
+                EventBus.Trigger(EventHooks.k_OnCardGameTableEnemiesTurn, this);
+            }
+            
+            EventBus.Trigger(EventHooks.k_OnCardGamePlayerEnergyUpdated, CurrentPlayerEnergyCount);
+        }
+
+        private void DiscardHandCards()
+        {
+            DiscardDeck.AddRange(HandDeck);
+            HandDeck.Clear();
+
+            if (DrawDeck.Count < startupCardsCount)
+            {
+                DrawDeck.AddRange(DiscardDeck);
+                DiscardDeck.Clear();
+            }
+
+            EventBus.Trigger(EventHooks.k_OnCardGameTableCardsUpdated, this);
         }
         
-        public bool TryPlayCard(Card card)
+        private void DrawCardsInHand()
         {
+            for (int i = 0; i < startupCardsCount; i++)
+            {
+                DrawRandomCard();
+            }
+            
+            EventBus.Trigger(EventHooks.k_OnCardGameTableCardsUpdated, this);
+        }
+        
+        private void DrawRandomCard()
+        {
+            int random_index = Random.Range(0, DrawDeck.Count);
+            var random_card = DrawDeck[random_index];
+            HandDeck.Add(random_card);
+            DrawDeck.Remove(random_card);
+        }
+        
+        public void TryPlayCard(Card card)
+        {
+            if (card.cost > CurrentPlayerEnergyCount)
+            {
+                return;
+            }
+            
             if (card.IsRequireTarget() && IsMoreOneTarget)
             {
                 if (!handSightPointer.IsHaveHit)
                 {
-                    return false;
+                    return;
                 }
             }
             
@@ -142,17 +183,24 @@ namespace Game
 
             for (int i = 0, i_max = card_effects.Length; i < i_max; i++)
             {
-                card_effects[i].Apply(CurrentPlayer, CurrentOpponents);
+                ApplyEffect(card_effects[i]);
             }
         
             HandDeck.Remove(card);
             DiscardDeck.Add(card);
+            EventBus.Trigger(EventHooks.k_OnCardGameTableCardDiscarded, card);
+
+            CurrentPlayerEnergyCount -= card.cost;
+            EventBus.Trigger(EventHooks.k_OnCardGamePlayerEnergyUpdated, CurrentPlayerEnergyCount);
             
-            EventBus.Trigger(EventHooks.k_CardGameTableOnCardsUpdated, this);
-            
-            return true;
+            return;
         }
 
+        public void ApplyEffect(CardEffect effect)
+        {
+            effect.Apply(CurrentPlayer, CurrentOpponents);
+        }
+        
         public void OnPlayerDead(IEntity entity)
         {
             AllPlayers.Remove(entity);

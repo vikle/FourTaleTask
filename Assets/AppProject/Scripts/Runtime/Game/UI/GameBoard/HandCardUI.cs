@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -12,10 +13,12 @@ namespace Game.UI
         public TMP_Text description;
 
         static readonly StringBuilder sr_textBuilder = new(128);
-        
-        public void Init()
+
+        public void _OnEnable()
         {
             var card = handCard.Card;
+            if (card == null) return;
+            
             background.sprite = card.background;
 
             var tb = sr_textBuilder;

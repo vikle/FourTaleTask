@@ -9,7 +9,8 @@ namespace ECSCore
         
         public bool Has<T>() where T : class, IFragment
         {
-            return m_fragmentsMap.ContainsKey(typeof(T));
+            var type = typeof(T);
+            return m_fragmentsMap.ContainsKey(type);
         }
 
         public T Trigger<T>() where T : class, IEvent, new()
@@ -48,6 +49,7 @@ namespace ECSCore
         public void Add<T>(T instance) where T : class, IFragment
         {
             if (instance == null) return;
+            
             var type = instance.GetType();
             m_fragmentsMap[type] = instance;
         }
@@ -69,17 +71,31 @@ namespace ECSCore
         public void Remove<T>() where T : class, IFragment
         {
             var type = typeof(T);
-
-            if (!m_fragmentsMap.TryGetValue(typeof(T), out var fragment)) return;
-            if (fragment is not T instance) return;
-
-            FragmentFactory.Release(instance);
-            m_fragmentsMap.Remove(type);
+            
+            if (m_fragmentsMap.TryGetValue(type, out var instance))
+            {
+                Remove(instance);
+            }
         }
-        
+
         public void Remove<T>(T instance) where T : class, IFragment
         {
             if (instance == null) return;
+            
+            RemoveFromMap(instance);
+            FragmentFactory.Release(instance);
+        }
+        
+        public void Remove(EntityActorComponent instance)
+        {
+            if (instance != null)
+            {
+                RemoveFromMap(instance);
+            }
+        }
+
+        private void RemoveFromMap(IFragment instance)
+        {
             var type = instance.GetType();
             m_fragmentsMap.Remove(type);
         }

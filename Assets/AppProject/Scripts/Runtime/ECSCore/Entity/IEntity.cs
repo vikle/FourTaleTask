@@ -13,5 +13,6 @@ namespace ECSCore
         T Trigger<T>() where T : class, IEvent, new();
         void Remove<T>() where T : class, IFragment;
         void Remove<T>(T instance) where T : class, IFragment;
+        void Remove(EntityActorComponent instance);
     };
 }

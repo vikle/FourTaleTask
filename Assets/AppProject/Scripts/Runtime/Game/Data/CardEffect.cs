@@ -23,6 +23,7 @@ namespace Game
         public float effectValue = 300f;
 
         [Header("UI")]
+        public Sprite icon;
         [TextArea(5, 8)]
         public string description;
 
