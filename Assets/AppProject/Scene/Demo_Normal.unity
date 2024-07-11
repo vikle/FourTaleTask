@@ -2962,9 +2962,13 @@ MonoBehaviour:
   startupEnergyCount: 3
   allAvailableCards:
   - {fileID: 11400000, guid: cddae6b31b1b56a4aac4dadf4ac31f84, type: 2}
-  - {fileID: 11400000, guid: 514263861a0f9b0428d81734ede99e44, type: 2}
+  - {fileID: 11400000, guid: cddae6b31b1b56a4aac4dadf4ac31f84, type: 2}
   - {fileID: 11400000, guid: b30506b9ebfff07439be84f2ad663b4f, type: 2}
   - {fileID: 11400000, guid: 7de06af6605167a4dac2f72964a54685, type: 2}
+  - {fileID: 11400000, guid: 7de06af6605167a4dac2f72964a54685, type: 2}
+  - {fileID: 11400000, guid: 7de06af6605167a4dac2f72964a54685, type: 2}
+  - {fileID: 11400000, guid: 07e898445b6e4ea48ae7ca074bfb773b, type: 2}
+  - {fileID: 11400000, guid: 07e898445b6e4ea48ae7ca074bfb773b, type: 2}
   - {fileID: 11400000, guid: 07e898445b6e4ea48ae7ca074bfb773b, type: 2}
 --- !u!4 &1462890988
 Transform:

@@ -77,8 +77,9 @@ namespace Game
         {
             CurrentPlayerEnergyCount = startupEnergyCount;
             
-            CurrentPlayer = playerActor.Entity;
-            AllPlayers.Add(CurrentPlayer);
+            var player_entity = playerActor.Entity;
+            CurrentPlayer = player_entity;
+            AllPlayers.Add(player_entity);
             
             for (int i = 0, i_max = enemyActors.Count; i < i_max; i++)
             {

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 namespace Game
@@ -251,7 +250,8 @@ namespace Game
         public void SetActive(bool value)
         {
             gameObject.SetActive(value);
-
+            m_transform.anchoredPosition = Vector2.zero;
+            
             if (value)
             {
                 onEnabled.Invoke();

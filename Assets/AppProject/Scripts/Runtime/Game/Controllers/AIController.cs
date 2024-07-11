@@ -11,6 +11,7 @@ namespace Game
         public float enemiesAttackDuration = 3f;
         
         readonly List<CardEffect> m_effects = new(8);
+        readonly List<IEntity> m_enemies = new(8);
 
         public void Init(GameController controller)
         {
@@ -21,12 +22,11 @@ namespace Game
             var all_cards = table.allAvailableCards;
 
             InitEffects(all_cards);
-
         }
 
-        private void InitEffects(Card[] allCards)
+        private void InitEffects(IReadOnlyList<Card> allCards)
         {
-            for (int i = 0, i_max = allCards.Length; i < i_max; i++)
+            for (int i = 0, i_max = allCards.Count; i < i_max; i++)
             {
                 var card = allCards[i];
                 var card_effects = card.effects;
@@ -50,10 +50,10 @@ namespace Game
         
         private void OnCardGameTableEnemiesTurn(CardGameTable table)
         {
-            StartCoroutine(IEPlayEnemiesTurn(table.enemyActors));
+            StartCoroutine(IEPlayEnemiesTurn(table));
         }
         
-        private void PrepareIntentions(List<IEntity> enemies)
+        private void PrepareIntentions(IReadOnlyList<IEntity> enemies)
         {
             int effects_count = m_effects.Count;
             
@@ -67,16 +67,20 @@ namespace Game
             }
         }
 
-        private IEnumerator IEPlayEnemiesTurn(List<EntityActor> enemies)
+        private IEnumerator IEPlayEnemiesTurn(CardGameTable table)
         {
+            m_enemies.Clear();
+            m_enemies.AddRange(table.AllPlayers);
+            m_enemies.RemoveAll(p => p.Has<PlayerMarker>());
+            
             for (float t = 0f; t < 1f; t += Time.deltaTime)
             {
                 yield return null;
             }
 
-            for (int i = 0, i_max = enemies.Count; i < i_max; i++)
+            for (int i = 0, i_max = m_enemies.Count; i < i_max; i++)
             {
-                var enemy_entity = enemies[i].Entity;
+                var enemy_entity = m_enemies[i];
                 enemy_entity.Trigger<EnemyPerformIntentionEvent>();
                 
                 yield return null;

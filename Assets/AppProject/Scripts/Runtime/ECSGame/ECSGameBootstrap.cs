@@ -21,6 +21,7 @@ namespace ECSGame
                 ;
             
             context
+                .BindSystem<EnemyIntentionSystem>()
                 .BindSystem<CharacterBattleSystem>()
                 .BindSystem<HealingSystem>()
                 .BindSystem<CombatSystem>()
@@ -28,7 +29,6 @@ namespace ECSGame
                 .BindSystem<DefenceBuffAddSystem>()
                 .BindSystem<DefenceBuffRemoveSystem>()
                 .BindSystem<PlayerDeathSystem>()
-                .BindSystem<EnemyIntentionSystem>()
                 .BindSystem<EnemyDeathSystem>()
                 ;
 

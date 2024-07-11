@@ -109,15 +109,13 @@ namespace Game
         void Update()
         {
             float delta_time = Time.deltaTime;
-
-            int cards_count = m_handCards.Count;
             int selected_index = HandCard.SelectedIndex;
 
-            for (int i = 0; i < cards_count; i++)
+            for (int i = 0; i < m_handCards.Count; i++)
             {
                 var card = m_handCards[i];
 
-                float card_size = (i - (cards_count - 1) / 2f);
+                float card_size = (i - (m_handCards.Count - 1) / 2f);
                 float deck_x = (card_size * cardSpacing);
 
                 if (selected_index != -1 && i != selected_index)

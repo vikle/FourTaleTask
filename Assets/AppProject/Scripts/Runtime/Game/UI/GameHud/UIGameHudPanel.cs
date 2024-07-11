@@ -53,11 +53,10 @@ namespace Game.UI
 
         private void OnCardGameTableOutOfEnergyMessage()
         {
-            StartCoroutine(FlickerLamp());
-            print("FlickerLamp");
+            StartCoroutine(IEFlickerErrorText());
         }
         
-        private IEnumerator FlickerLamp()
+        private IEnumerator IEFlickerErrorText()
         {
             float elapsed_time = 0f;
             while (elapsed_time < 1f)

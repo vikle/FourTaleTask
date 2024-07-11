@@ -1421,8 +1421,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_actor: {fileID: 184542191514228844}
-  maxHealth: 1000
-  currentHealth: 1000
+  maxHealth: 500
+  currentHealth: 500
 --- !u!114 &3441922035692767279
 MonoBehaviour:
   m_ObjectHideFlags: 0
