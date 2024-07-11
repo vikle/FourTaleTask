@@ -48,7 +48,6 @@ namespace Game
 
         public void PostInit()
         {
-            EventBus.Trigger(EventHooks.k_OnCardGameTableCardsUpdated, this);
             EventBus.Trigger(EventHooks.k_OnCardGameTablePlayerTurn, this);
             EventBus.Trigger(EventHooks.k_OnCardGamePlayerEnergyUpdated, CurrentPlayerEnergyCount);
         }
@@ -137,13 +136,9 @@ namespace Game
             DiscardDeck.AddRange(HandDeck);
             HandDeck.Clear();
 
-            if (DrawDeck.Count < startupCardsCount)
-            {
-                DrawDeck.AddRange(DiscardDeck);
-                DiscardDeck.Clear();
-            }
-
-            EventBus.Trigger(EventHooks.k_OnCardGameTableCardsUpdated, this);
+            if (DrawDeck.Count >= startupCardsCount) return;
+            DrawDeck.AddRange(DiscardDeck);
+            DiscardDeck.Clear();
         }
         
         private void DrawCardsInHand()
@@ -152,8 +147,6 @@ namespace Game
             {
                 DrawRandomCard();
             }
-            
-            EventBus.Trigger(EventHooks.k_OnCardGameTableCardsUpdated, this);
         }
         
         private void DrawRandomCard()
@@ -168,6 +161,7 @@ namespace Game
         {
             if (card.cost > CurrentPlayerEnergyCount)
             {
+                EventBus.Trigger(EventHooks.k_OnCardGameTableOutOfEnergyMessage);
                 return;
             }
             
@@ -188,7 +182,7 @@ namespace Game
         
             HandDeck.Remove(card);
             DiscardDeck.Add(card);
-            EventBus.Trigger(EventHooks.k_OnCardGameTableCardDiscarded, card);
+            EventBus.Trigger(EventHooks.k_OnCardGameTableCardDiscarded, (this, card));
 
             CurrentPlayerEnergyCount -= card.cost;
             EventBus.Trigger(EventHooks.k_OnCardGamePlayerEnergyUpdated, CurrentPlayerEnergyCount);

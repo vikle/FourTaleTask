@@ -69,7 +69,10 @@ namespace Game
 
         private IEnumerator IEPlayEnemiesTurn(List<EntityActor> enemies)
         {
-            yield return null;
+            for (float t = 0f; t < 1f; t += Time.deltaTime)
+            {
+                yield return null;
+            }
 
             for (int i = 0, i_max = enemies.Count; i < i_max; i++)
             {
@@ -82,7 +85,7 @@ namespace Game
                 // Не успел доделать ожидание продолжительности хода каждого врага.
                 // Так как ее калибровка заняла бы много времени, а эффекти был бы примерно такой же
                 // Потому просто заглушка =))
-                for (float t = 0f; t < enemiesAttackDuration; t += TimeData.DeltaTime)
+                for (float t = 0f; t < enemiesAttackDuration; t += Time.deltaTime)
                 {
                     yield return null;
                 }

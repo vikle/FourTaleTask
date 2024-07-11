@@ -18,7 +18,7 @@ namespace Game
         public HandFingerLine handFingerLine;
 
         readonly Stack<HandCard> m_cardsPool = new(5);
-        readonly List<HandCard> m_handCards = new(5);
+        List<HandCard> m_handCards = new(5);
         readonly Dictionary<Card, HandCard> m_handCardsMap = new(5);
         Transform m_cardsParent;
 
@@ -30,11 +30,34 @@ namespace Game
             
             handFingerLine.Init();
             m_cardsPool.Push(cardPrefab);
-            
-            EventBus.Register<CardGameTable>(EventHooks.k_OnCardGameTableCardsUpdated, OnCardGameTableCardsUpdated);
+
+            EventBus.Register<(CardGameTable, Card)>(EventHooks.k_OnCardGameTableCardDiscarded, OnCardGameTableCardDiscarded);
+            EventBus.Register<CardGameTable>(EventHooks.k_OnCardGameTablePlayerTurn, OnCardGameTablePlayerTurn);
+            EventBus.Register<CardGameTable>(EventHooks.k_OnCardGameTableEnemiesTurn, OnCardGameTableEnemiesTurn);
         }
 
-        private void OnCardGameTableCardsUpdated(CardGameTable table)
+        private void OnCardGameTableCardDiscarded((CardGameTable, Card) tuple)
+        {
+            DiscardCard(tuple.Item2);
+        }
+        
+        private void DiscardCard(Card card)
+        {
+            if (m_handCardsMap.TryGetValue(card, out var hand_card))
+            {
+                DiscardCard(hand_card);
+            }
+        }
+
+        private void DiscardCard(HandCard handCard)
+        {
+            m_handCards.Remove(handCard);
+            m_cardsPool.Push(handCard);
+            m_handCardsMap.Remove(handCard.Card);
+            handCard.SetActive(false);
+        }
+
+        private void OnCardGameTablePlayerTurn(CardGameTable table)
         {
             var hand_deck = table.HandDeck;
             
@@ -43,6 +66,8 @@ namespace Game
                 var card = hand_deck[i];
                 DrawCard(card, table);
             }
+            
+            SortCards();
         }
 
         private void DrawCard(Card card, CardGameTable table)
@@ -58,6 +83,7 @@ namespace Game
             hand_card.SetActive(true);
             
             m_handCards.Add(hand_card);
+            m_handCardsMap[card] = hand_card;
         }
 
         private HandCard GetHandCardInstance()
@@ -67,6 +93,19 @@ namespace Game
                 : Instantiate(cardPrefab, m_cardsParent);
         }
         
+        private void OnCardGameTableEnemiesTurn(CardGameTable table)
+        {
+            for (int i = 0, i_max = m_handCards.Count; i < i_max; i++)
+            {
+                var hand_card = m_handCards[i];
+                m_cardsPool.Push(hand_card);
+                hand_card.SetActive(false);
+            }
+            
+            m_handCards.Clear();
+            m_handCardsMap.Clear();
+        }
+
         void Update()
         {
             float delta_time = Time.deltaTime;
@@ -128,13 +167,6 @@ namespace Game
         public void ToForeground(HandCard handCard)
         {
             handCard.SetTransformSiblingIndex(m_handCards.Count - 1);
-        }
-        
-        private void DiscardCard(HandCard handCard)
-        {
-            m_handCards.Remove(handCard);
-            m_cardsPool.Push(handCard);
-            handCard.gameObject.SetActive(false);
         }
     };
 }

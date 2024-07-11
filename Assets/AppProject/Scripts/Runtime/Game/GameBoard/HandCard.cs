@@ -211,6 +211,7 @@ namespace Game
             if (m_isCardInGame)
             {
                 Table.TryPlayCard(Card);
+                SetSightActive(false);
             }
 
             UnSelect();
@@ -258,7 +259,6 @@ namespace Game
             }
             
             m_isMouseEnter = false;
-            SetSightActive(false);
         }
     };
 }
